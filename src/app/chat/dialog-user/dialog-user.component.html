@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>{{params.title}}</h2>
+
+<mat-dialog-content>
+  <div>
+  <mat-form-field >
+    <input matInput name="username" placeholder="Username" 
+           [(ngModel)]="params.username" (keyup.enter)="onSave()" [formControl]="usernameFormControl" required>
+    <mat-error>This field is required</mat-error>
+  </mat-form-field>
+  </div>
+  <div>
+  <mat-form-field *ngIf="params?.dialogType === 0">
+    <input matInput name="password" placeholder="Password" [type]="'password'"
+           [(ngModel)]="params.password" (keyup.enter)="onSave()" [formControl]="passwordFormControl" required>
+    <mat-error>This field is required</mat-error>
+  </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions *ngIf="params?.dialogType === 0" [attr.align]="'end'">
+  <button mat-button mat-dialog-close color="secondary">Close</button>
+  <button mat-raised-button color="primary" mat-dialog-close (click)="onSave()" [disabled]="usernameFormControl.hasError('required') || passwordFormControl.hasError('required')">Login</button>
+</mat-dialog-actions>
+
+<mat-dialog-actions *ngIf="params?.dialogType === 1" [attr.align]="'end'">
+  <button mat-button mat-dialog-close color="primary">Close</button>
+  <button mat-raised-button color="primary" mat-dialog-close (click)="onSave()">Logout</button>
+</mat-dialog-actions>
