@@ -101,8 +101,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
     this.openUserPopup({
       data: {
         username: this.user.name,
-        title: 'Profile',
-        dialogType: DialogUserType.LOGOUT
+        title: this.user.name == null ? 'Welcome' : 'Profile',
+        dialogType: this.user.name == null ? DialogUserType.LOGIN : DialogUserType.LOGOUT
       }
     });
   }

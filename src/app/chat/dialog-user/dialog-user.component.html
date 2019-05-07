@@ -4,14 +4,14 @@
   <div>
   <mat-form-field >
     <input matInput name="username" placeholder="Username" 
-           [(ngModel)]="params.username" (keyup.enter)="onLogin()" [formControl]="usernameFormControl" required>
+           [(ngModel)]="params.username" (keyup.enter)="onLogin()" (focus)="resetErrorMsg()" [formControl]="usernameFormControl" required>
     <mat-error>This field is required</mat-error>
   </mat-form-field>
   </div>
   <div>
   <mat-form-field *ngIf="params?.dialogType === 0">
     <input matInput name="password" placeholder="Password" [type]="'password'"
-           [(ngModel)]="params.password" (keyup.enter)="onLogin()" [formControl]="passwordFormControl" required>
+           [(ngModel)]="params.password" (keyup.enter)="onLogin()" (focus)="resetErrorMsg()" [formControl]="passwordFormControl" required>
     <mat-error>This field is required</mat-error>
   </mat-form-field>
   </div>
@@ -19,10 +19,11 @@
 
 <mat-dialog-actions *ngIf="params?.dialogType === 0" [attr.align]="'end'">
   <button mat-button mat-dialog-close color="secondary">Close</button>
-  <button mat-raised-button color="primary" mat-dialog-close (click)="onLogin()" [disabled]="usernameFormControl.hasError('required') || passwordFormControl.hasError('required')">Login</button>
+  <button mat-raised-button color="primary" (click)="onLogin()" [disabled]="usernameFormControl.hasError('required') || passwordFormControl.hasError('required')">Login</button>
 </mat-dialog-actions>
 
 <mat-dialog-actions *ngIf="params?.dialogType === 1" [attr.align]="'end'">
   <button mat-button mat-dialog-close color="primary">Close</button>
   <button mat-raised-button color="primary" mat-dialog-close (click)="onLogout()">Logout</button>
 </mat-dialog-actions>
+<mat-error *ngIf="showError">{{errMsg}}</mat-error>
