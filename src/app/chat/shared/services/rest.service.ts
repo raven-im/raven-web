@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { LoginParam } from '../model/loginParam';
-import { AccessParam } from '../model/accessParam';
 import { LoginResult } from '../model/loginResult';
 import { AccessResult } from '../model/accessResult';
 
@@ -26,10 +25,38 @@ export class RestService {
   }
   // app server.
   getUsers(): Observable<LoginResult> {
-    return this.http.get<LoginResult>(APP_SERVER_URL + GET_TOKEN);
+    return this.http.get<LoginResult>(APP_SERVER_URL + GET_USER_LIST);
   }
   // im server.
-  getAccess(param: AccessParam): Observable<AccessResult> {
-    return this.http.post<AccessResult>(IM_SERVER_URL + GET_ACCESS_NODE, param, httpOptions);
+  getAccess(key: string, token: string): Observable<AccessResult> {
+    let urlOptions = {
+      headers: new HttpHeaders({ 'AppKey': key, 'Token': token})
+    };
+    return this.http.get<AccessResult>(IM_SERVER_URL + GET_ACCESS_NODE, urlOptions);
+  }
+
+  showErrorMsg(code: number): string {
+    switch(code) {
+      case 10101:
+        return "Invalid Password";
+      case 10102:
+        return "Invalid Username";
+      case 10103:
+        return "User not found";
+      case 10104:
+        return "Password not match";
+      case 10105:
+        return "User disabled";
+      case 11001:
+        return "User id not exists";
+      case 13001:
+        return "App key is invalid";
+      case 13002:
+        return "Token cannot be made";
+      case 13003:
+        return "Token is invalid";
+      default:
+        return "Server error.";
+    }
   }
 }

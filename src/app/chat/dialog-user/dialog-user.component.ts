@@ -4,7 +4,6 @@ import { FormControl, Validators, MinLengthValidator } from '@angular/forms';
 import { RestService } from '../shared/services/rest.service';
 import { LoginParam } from '../shared/model/loginParam';
 import { DialogUserType } from './dialog-user-type';
-import { AccessParam } from '../shared/model/accessParam';
 
 @Component({
   selector: 'tcc-dialog-user',
@@ -39,13 +38,13 @@ export class DialogUserComponent implements OnInit {
           localStorage.setItem('user', loginResult.data.uid);
           localStorage.setItem('token', loginResult.data.token);
           // 2.  get Access node from IM server.
-          let accessParam = new AccessParam(loginResult.data.appKey, loginResult.data.token);
-          this.restClient.getAccess(accessParam)
+          this.restClient.getAccess(loginResult.data.appKey, loginResult.data.token)
             .subscribe((accessResult) => {
               console.log('access code:', accessResult.code);
               if (accessResult.code === 10000) {
                 console.log('access node:', accessResult.data.ip, accessResult.data.port);
-                localStorage.setItem('access-node', accessResult.data.ip + ":" + accessResult.data.port);
+                localStorage.setItem('access-node-ip', accessResult.data.ip);
+                localStorage.setItem('access-node-port',  "" + accessResult.data.port);
                 //close dialog.
                 this.dialogRef.close({
                   username: this.params.username,
@@ -68,7 +67,8 @@ export class DialogUserComponent implements OnInit {
     localStorage.removeItem('app-key');
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-    localStorage.removeItem('access-node');
+    localStorage.removeItem('access-node-ip');
+    localStorage.removeItem('access-node-port');
 
     this.dialogRef.close({
       dialogType: DialogUserType.LOGIN
@@ -77,25 +77,7 @@ export class DialogUserComponent implements OnInit {
 
   private showErrorMsg(code: number): void {
     this.showError = true;
-    switch(code) {
-      case 10101:
-        this.errMsg = "Invalid Password";
-        break;
-      case 10102:
-        this.errMsg = "Invalid Username";
-        break;
-      case 10103:
-        this.errMsg = "User not found";
-        break;
-      case 10104:
-        this.errMsg = "Password not match";
-        break;
-      case 10105:
-        this.errMsg = "User disabled";
-        break;
-      default:
-        this.errMsg = "Server error.";
-    }
+    this.errMsg = this.restClient.showErrorMsg(code);
   }
 
   private resetErrorMsg(): void {
