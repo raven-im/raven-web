@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, MinLengthValidator } from '@angular/forms';
 import { RestService } from '../shared/services/rest.service';
 import { LoginParam } from '../shared/model/loginParam';
 import { DialogUserType } from './dialog-user-type';
+import { AccessParam } from '../shared/model/accessParam';
 
 @Component({
   selector: 'tcc-dialog-user',
@@ -28,25 +29,47 @@ export class DialogUserComponent implements OnInit {
   }
 
   public onLogin(): void {
-    var param = new LoginParam(this.params.username, this.params.password);
-    this.restClient.login(param)
-      .subscribe((result) => {
-        console.log(result.code);
-        if (result.code === 10000) {
-          this.dialogRef.close({
-            username: this.params.username,
-            password: this.params.password,
-            dialogType: this.params.dialogType,
-            previousUsername: this.previousUsername
-          });
+    let loginParam = new LoginParam(this.params.username, this.params.password);
+    this.restClient.login(loginParam)
+      .subscribe((loginResult) => {
+        console.log('login code:', loginResult.code);
+        if (loginResult.code === 10000) {
+          // 1. save the response data in localstorage.
+          localStorage.setItem('app-key', loginResult.data.appKey);
+          localStorage.setItem('user', loginResult.data.uid);
+          localStorage.setItem('token', loginResult.data.token);
+          // 2.  get Access node from IM server.
+          let accessParam = new AccessParam(loginResult.data.appKey, loginResult.data.token);
+          this.restClient.getAccess(accessParam)
+            .subscribe((accessResult) => {
+              console.log('access code:', accessResult.code);
+              if (accessResult.code === 10000) {
+                console.log('access node:', accessResult.data.ip, accessResult.data.port);
+                localStorage.setItem('access-node', accessResult.data.ip + ":" + accessResult.data.port);
+                //close dialog.
+                this.dialogRef.close({
+                  username: this.params.username,
+                  password: this.params.password,
+                  dialogType: this.params.dialogType,
+                  previousUsername: this.previousUsername
+                });
+              } else {
+                this.showErrorMsg(accessResult.code);
+              }
+            });
         } else {
-          this.showErrorMsg(result.code);
+          this.showErrorMsg(loginResult.code);
         }
       });
   }
 
   public onLogout(): void {
     //TODO  logout.
+    localStorage.removeItem('app-key');
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('access-node');
+
     this.dialogRef.close({
       dialogType: DialogUserType.LOGIN
     });

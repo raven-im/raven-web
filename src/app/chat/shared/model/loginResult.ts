@@ -1,6 +1,6 @@
 import { LoginOutParam } from "./loginOutParam";
 
-export class RestResult {
+export class LoginResult {
     code: number;
     msg: string;
     data: LoginOutParam;

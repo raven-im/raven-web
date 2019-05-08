@@ -1,5 +1,5 @@
 export class LoginOutParam {
-    appKey: number;
+    appKey: string;
     uid: string;
     token: string;
 }
