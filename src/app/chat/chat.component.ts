@@ -3,11 +3,12 @@ import { MatDialog, MatDialogRef, MatList, MatListItem } from '@angular/material
 
 import { Action } from './shared/model/action';
 import { Event } from './shared/model/event';
-import { Message } from './shared/model/message';
+// import { Message } from './shared/model/message';
 import { User } from './shared/model/user';
 import { SocketService } from './shared/services/socket.service';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { DialogUserType } from './dialog-user/dialog-user-type';
+import { com } from 'assets/message';
 
 
 const AVATAR_URL = 'https://api.adorable.io/avatars/285';
@@ -20,7 +21,7 @@ const AVATAR_URL = 'https://api.adorable.io/avatars/285';
 export class ChatComponent implements OnInit, AfterViewInit {
   action = Action;
   user: User;
-  messages: Message[] = [];
+  messages: com.raven.common.protos.RavenMessage[] = [];
   messageContent: string;
   ioConnection: any;
   dialogRef: MatDialogRef<DialogUserComponent> | null;
@@ -77,7 +78,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
     this.socketService.initSocket();
 
     this.ioConnection = this.socketService.onMessage()
-      .subscribe((message: Message) => {
+      .subscribe((message: com.raven.common.protos.RavenMessage) => {
         this.messages.push(message);
       });
 
@@ -85,12 +86,14 @@ export class ChatComponent implements OnInit, AfterViewInit {
     this.socketService.onEvent(Event.CONNECT)
       .subscribe(() => {
         console.log('connected');
+        this.socketService.login();
       });
 
     this.socketService.onEvent(Event.DISCONNECT)
       .subscribe(() => {
         console.log('disconnected');
       });
+    this.socketService.login();
   }
 
   private getRandomId(): number {
@@ -129,31 +132,31 @@ export class ChatComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.socketService.send({
-      from: this.user,
-      content: message
-    });
+    // this.socketService.send({
+    //   from: this.user,
+    //   content: message
+    // });
     this.messageContent = null;
   }
 
   public sendNotification(params: any, action: Action): void {
-    let message: Message;
+    let message: com.raven.common.protos.RavenMessage;
 
-    if (action === Action.JOINED) {
-      message = {
-        from: this.user,
-        action: action
-      }
-    } else if (action === Action.RENAME) {
-      message = {
-        action: action,
-        content: {
-          username: this.user.name,
-          previousUsername: params.previousUsername
-        }
-      };
-    }
+    // if (action === Action.JOINED) {
+    //   message = {
+    //     from: this.user,
+    //     action: action
+    //   }
+    // } else if (action === Action.RENAME) {
+    //   message = {
+    //     action: action,
+    //     content: {
+    //       username: this.user.name,
+    //       previousUsername: params.previousUsername
+    //     }
+    //   };
+    // }
 
-    this.socketService.send(message);
+    // this.socketService.send(message);
   }
 }

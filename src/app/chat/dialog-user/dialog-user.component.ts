@@ -43,8 +43,7 @@ export class DialogUserComponent implements OnInit {
               console.log('access code:', accessResult.code);
               if (accessResult.code === 10000) {
                 console.log('access node:', accessResult.data.ip, accessResult.data.port);
-                localStorage.setItem('access-node-ip', accessResult.data.ip);
-                localStorage.setItem('access-node-port',  "" + accessResult.data.port);
+                localStorage.setItem('access-node', accessResult.data.ip + ":" + accessResult.data.port);
                 //close dialog.
                 this.dialogRef.close({
                   username: this.params.username,
@@ -67,8 +66,7 @@ export class DialogUserComponent implements OnInit {
     localStorage.removeItem('app-key');
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-    localStorage.removeItem('access-node-ip');
-    localStorage.removeItem('access-node-port');
+    localStorage.removeItem('access-node');
 
     this.dialogRef.close({
       dialogType: DialogUserType.LOGIN
