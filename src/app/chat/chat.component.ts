@@ -76,24 +76,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   private initIoConnection(): void {
     this.socketService.initSocket();
-
-    this.ioConnection = this.socketService.onMessage()
-      .subscribe((message: com.raven.common.protos.RavenMessage) => {
-        this.messages.push(message);
-      });
-
-
-    this.socketService.onEvent(Event.CONNECT)
-      .subscribe(() => {
-        console.log('connected');
-        this.socketService.login();
-      });
-
-    this.socketService.onEvent(Event.DISCONNECT)
-      .subscribe(() => {
-        console.log('disconnected');
-      });
-    this.socketService.login();
   }
 
   private getRandomId(): number {
@@ -132,6 +114,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    this.socketService.login();
     // this.socketService.send({
     //   from: this.user,
     //   content: message
