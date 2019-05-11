@@ -192,7 +192,7 @@ export namespace com {
                 interface ILogin {
 
                     /** Login id */
-                    id?: (number |null);
+                    id?: (number|Long|null);
 
                     /** Login uid */
                     uid?: (string|null);
@@ -211,7 +211,7 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.ILogin);
 
                     /** Login id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** Login uid. */
                     public uid: string;
@@ -294,7 +294,7 @@ export namespace com {
                 interface ILoginAck {
 
                     /** LoginAck id */
-                    id?: (number|null);
+                    id?: (number|Long|null);
 
                     /** LoginAck code */
                     code?: (com.raven.common.protos.Code|null);
@@ -303,7 +303,7 @@ export namespace com {
                     msg?: (string|null);
 
                     /** LoginAck time */
-                    time?: (number |null);
+                    time?: (number|Long|null);
                 }
 
                 /** Represents a LoginAck. */
@@ -316,7 +316,7 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.ILoginAck);
 
                     /** LoginAck id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** LoginAck code. */
                     public code: com.raven.common.protos.Code;
@@ -325,7 +325,7 @@ export namespace com {
                     public msg: string;
 
                     /** LoginAck time. */
-                    public time: (number );
+                    public time: (number|Long);
 
                     /**
                      * Creates a new LoginAck instance using the specified properties.
@@ -402,7 +402,7 @@ export namespace com {
                 interface IServerInfo {
 
                     /** ServerInfo id */
-                    id?: (number |null);
+                    id?: (number|Long|null);
 
                     /** ServerInfo ip */
                     ip?: (string|null);
@@ -421,7 +421,7 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.IServerInfo);
 
                     /** ServerInfo id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** ServerInfo ip. */
                     public ip: string;
@@ -504,10 +504,10 @@ export namespace com {
                 interface IUpDownMessage {
 
                     /** UpDownMessage id */
-                    id?: (number |null);
+                    id?: (number|Long|null);
 
                     /** UpDownMessage cid */
-                    cid?: (number |null);
+                    cid?: (number|Long|null);
 
                     /** UpDownMessage fromUid */
                     fromUid?: (string|null);
@@ -538,10 +538,10 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.IUpDownMessage);
 
                     /** UpDownMessage id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** UpDownMessage cid. */
-                    public cid: (number );
+                    public cid: (number|Long);
 
                     /** UpDownMessage fromUid. */
                     public fromUid: string;
@@ -636,7 +636,7 @@ export namespace com {
                 interface IHeartBeat {
 
                     /** HeartBeat id */
-                    id?: (number |null);
+                    id?: (number|Long|null);
 
                     /** HeartBeat heartBeatType */
                     heartBeatType?: (com.raven.common.protos.HeartBeatType|null);
@@ -652,7 +652,7 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.IHeartBeat);
 
                     /** HeartBeat id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** HeartBeat heartBeatType. */
                     public heartBeatType: com.raven.common.protos.HeartBeatType;
@@ -738,10 +738,10 @@ export namespace com {
                 interface IMessageAck {
 
                     /** MessageAck id */
-                    id?: (number |null);
+                    id?: (number|Long|null);
 
                     /** MessageAck cid */
-                    cid?: (number |null);
+                    cid?: (number|Long|null);
 
                     /** MessageAck targetUid */
                     targetUid?: (string|null);
@@ -750,7 +750,7 @@ export namespace com {
                     converId?: (string|null);
 
                     /** MessageAck time */
-                    time?: (number |null);
+                    time?: (number|Long|null);
 
                     /** MessageAck code */
                     code?: (com.raven.common.protos.Code|null);
@@ -766,10 +766,10 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.IMessageAck);
 
                     /** MessageAck id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** MessageAck cid. */
-                    public cid: (number );
+                    public cid: (number|Long);
 
                     /** MessageAck targetUid. */
                     public targetUid: string;
@@ -778,7 +778,7 @@ export namespace com {
                     public converId: string;
 
                     /** MessageAck time. */
-                    public time: (number );
+                    public time: (number|Long);
 
                     /** MessageAck code. */
                     public code: com.raven.common.protos.Code;
@@ -870,7 +870,7 @@ export namespace com {
                 interface IMessageContent {
 
                     /** MessageContent id */
-                    id?: (number |null);
+                    id?: (number|Long|null);
 
                     /** MessageContent uid */
                     uid?: (string|null);
@@ -882,7 +882,7 @@ export namespace com {
                     content?: (string|null);
 
                     /** MessageContent time */
-                    time?: (number |null);
+                    time?: (number|Long|null);
                 }
 
                 /** Represents a MessageContent. */
@@ -895,7 +895,7 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.IMessageContent);
 
                     /** MessageContent id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** MessageContent uid. */
                     public uid: string;
@@ -907,7 +907,7 @@ export namespace com {
                     public content: string;
 
                     /** MessageContent time. */
-                    public time: (number );
+                    public time: (number|Long);
 
                     /**
                      * Creates a new MessageContent instance using the specified properties.
@@ -992,13 +992,13 @@ export namespace com {
                 interface IHisMessagesReq {
 
                     /** HisMessagesReq id */
-                    id?: (number |null);
+                    id?: (number|Long|null);
 
                     /** HisMessagesReq converId */
                     converId?: (string|null);
 
                     /** HisMessagesReq beaginTime */
-                    beaginTime?: (number |null);
+                    beaginTime?: (number|Long|null);
                 }
 
                 /** Represents a HisMessagesReq. */
@@ -1011,13 +1011,13 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.IHisMessagesReq);
 
                     /** HisMessagesReq id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** HisMessagesReq converId. */
                     public converId: string;
 
                     /** HisMessagesReq beaginTime. */
-                    public beaginTime: (number );
+                    public beaginTime: (number|Long);
 
                     /**
                      * Creates a new HisMessagesReq instance using the specified properties.
@@ -1094,7 +1094,7 @@ export namespace com {
                 interface IHisMessagesAck {
 
                     /** HisMessagesAck id */
-                    id?: (number |null);
+                    id?: (number|Long|null);
 
                     /** HisMessagesAck converId */
                     converId?: (string|null);
@@ -1113,7 +1113,7 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.IHisMessagesAck);
 
                     /** HisMessagesAck id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** HisMessagesAck converId. */
                     public converId: string;
@@ -1196,7 +1196,7 @@ export namespace com {
                 interface IConverReq {
 
                     /** ConverReq id */
-                    id?: (number |null);
+                    id?: (number|Long|null);
 
                     /** ConverReq type */
                     type?: (com.raven.common.protos.OperationType|null);
@@ -1215,7 +1215,7 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.IConverReq);
 
                     /** ConverReq id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** ConverReq type. */
                     public type: com.raven.common.protos.OperationType;
@@ -1304,13 +1304,13 @@ export namespace com {
                 interface IConverAck {
 
                     /** ConverAck id */
-                    id?: (number |null);
+                    id?: (number|Long|null);
 
                     /** ConverAck code */
                     code?: (com.raven.common.protos.Code|null);
 
                     /** ConverAck time */
-                    time?: (number |null);
+                    time?: (number|Long|null);
 
                     /** ConverAck converInfo */
                     converInfo?: (com.raven.common.protos.IConverInfo|null);
@@ -1329,13 +1329,13 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.IConverAck);
 
                     /** ConverAck id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** ConverAck code. */
                     public code: com.raven.common.protos.Code;
 
                     /** ConverAck time. */
-                    public time: (number );
+                    public time: (number|Long);
 
                     /** ConverAck converInfo. */
                     public converInfo?: (com.raven.common.protos.IConverInfo|null);
@@ -1430,7 +1430,7 @@ export namespace com {
                     groupId?: (string|null);
 
                     /** ConverInfo unCount */
-                    unCount?: (number |null);
+                    unCount?: (number|Long|null);
 
                     /** ConverInfo lastContent */
                     lastContent?: (com.raven.common.protos.IMessageContent|null);
@@ -1458,7 +1458,7 @@ export namespace com {
                     public groupId: string;
 
                     /** ConverInfo unCount. */
-                    public unCount: (number );
+                    public unCount: (number|Long);
 
                     /** ConverInfo lastContent. */
                     public lastContent?: (com.raven.common.protos.IMessageContent|null);
@@ -1538,7 +1538,7 @@ export namespace com {
                 interface INotifyMessage {
 
                     /** NotifyMessage id */
-                    id?: (number |null);
+                    id?: (number|Long|null);
 
                     /** NotifyMessage type */
                     type?: (string|null);
@@ -1550,7 +1550,7 @@ export namespace com {
                     content?: (string|null);
 
                     /** NotifyMessage time */
-                    time?: (number |null);
+                    time?: (number|Long|null);
                 }
 
                 /** Represents a NotifyMessage. */
@@ -1563,7 +1563,7 @@ export namespace com {
                     constructor(properties?: com.raven.common.protos.INotifyMessage);
 
                     /** NotifyMessage id. */
-                    public id: (number );
+                    public id: (number|Long);
 
                     /** NotifyMessage type. */
                     public type: string;
@@ -1575,7 +1575,7 @@ export namespace com {
                     public content: string;
 
                     /** NotifyMessage time. */
-                    public time: (number );
+                    public time: (number|Long);
 
                     /**
                      * Creates a new NotifyMessage instance using the specified properties.

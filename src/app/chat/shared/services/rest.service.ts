@@ -24,7 +24,7 @@ export class RestService {
     return this.http.post<LoginResult>(APP_SERVER_URL + GET_TOKEN, param, httpOptions);
   }
   // app server.
-  getUsers(): Observable<LoginResult> {
+  getUsers(): Observable<LoginResult> { //TODO
     return this.http.get<LoginResult>(APP_SERVER_URL + GET_USER_LIST);
   }
   // im server.

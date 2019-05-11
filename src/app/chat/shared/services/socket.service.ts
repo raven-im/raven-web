@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Event } from '../model/event';
 import { map } from 'rxjs/operators';
 import * as Rx from 'rxjs/Rx';
 import { com } from 'assets/message';
 import { Subject } from 'rxjs/Rx';
-import { LoginOutParam } from '../model/loginOutParam';
+import { RestService } from './rest.service';
 @Injectable()
 export class SocketService {
 
-    private msgMap = new Map<number, any>();
+    private msgMap = new Map<string, any>();
     private clientId: number = 1;
     private isLogin: boolean = false;
 
     private subject: Rx.Subject<MessageEvent>;
     public messages: Subject<com.raven.common.protos.RavenMessage>;
+
+    constructor(private restClient: RestService) { }
 
 	private connect(url): Rx.Subject<MessageEvent> {
 		if (!this.subject) {
@@ -78,7 +78,7 @@ export class SocketService {
 
     private sendMsg(msg: com.raven.common.protos.RavenMessage) {
         console.log('new message from client to websocket: ' + msg.type);
-        this.msgMap.set(this.clientId, msg);
+        this.msgMap.set(this.clientId.toString(), msg);
         this.clientId++;
 		this.messages.next(msg);
     }
@@ -90,19 +90,26 @@ export class SocketService {
             case com.raven.common.protos.RavenMessage.Type.LoginAck:
                 //check if local saved , otherwise invalid.
                 let loginAck = msg.loginAck;
-                if (loginAck.code === com.raven.common.protos.Code.SUCCESS && this.msgMap.has(loginAck.id)) {
+                if (loginAck.code === com.raven.common.protos.Code.SUCCESS && this.msgMap.has(loginAck.id.toString())) {
                     this.isLogin = true;
-                    this.msgMap.delete(loginAck.id);
+                    this.msgMap.delete(loginAck.id.toString());
+
+                    //get Conversation list.
+                    this.getAllConversationList(this.clientId);
+                    //get Contacts list.
+                    this.restClient.getUsers().subscribe((list) => {
+                        console.log("User list length:");
+                    });
                 }
                 break;
             case com.raven.common.protos.RavenMessage.Type.HeartBeat:
                 let hb = msg.heartBeat;
-                this.sendPong(hb.id);
+                this.sendPong(+hb.id.toString());
                 break;
             case com.raven.common.protos.RavenMessage.Type.MessageAck:
                 let msgAck = msg.messageAck;
-                if (this.msgMap.has(msgAck.cid)) {
-                    original = this.msgMap.get(msgAck.cid);
+                if (this.msgMap.has(msgAck.cid.toString())) {
+                    original = this.msgMap.get(msgAck.cid.toString());
                 } else {
                     console.log("error: map not contain " + msgAck.cid);
                 } 
@@ -114,12 +121,14 @@ export class SocketService {
                 break;
             case com.raven.common.protos.RavenMessage.Type.ConverAck:
                 let convAck = msg.converAck;
-                if (this.msgMap.has(convAck.id)) {
-                    original = this.msgMap.get(convAck.id);
+                if (this.msgMap.has(convAck.id.toString())) {
+                    original = this.msgMap.get(convAck.id.toString());
                 } else {
                     console.log("error: map not contain " + convAck.id);
                 } 
                 if (convAck.code === com.raven.common.protos.Code.SUCCESS) {
+                    console.log(" convAck id:" + convAck.id.toString());
+                    console.log(" convAck time:" +convAck.time.toString());
                     if (convAck.converList != null) {
                         // TODO Conversation List.
                     } else if (convAck.converInfo.converId != null) {
@@ -132,9 +141,9 @@ export class SocketService {
 
             case com.raven.common.protos.RavenMessage.Type.HisMessagesAck:
                 let hisAck = msg.hisMessagesAck;
-                if (this.msgMap.has(hisAck.id)) {
-                    original = this.msgMap.get(hisAck.id);
-                    this.msgMap.delete(hisAck.id);
+                if (this.msgMap.has(hisAck.id.toString())) {
+                    original = this.msgMap.get(hisAck.id.toString());
+                    this.msgMap.delete(hisAck.id.toString());
                     //TODO History Message Insert.
                 } else {
                     console.log("error: map not contain " + hisAck.id);
@@ -172,7 +181,7 @@ export class SocketService {
             login: login
         });
 
-        this.msgMap.set(this.clientId, message);
+        this.msgMap.set(this.clientId.toString(), message);
         this.clientId++;
         this.messages.next(message);
     }
