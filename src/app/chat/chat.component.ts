@@ -102,9 +102,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
       this.user.name = paramsDialog.username;
       if (paramsDialog.dialogType === DialogUserType.LOGIN) {
         this.initIoConnection();
-        this.sendNotification(paramsDialog, Action.JOINED);
       } else if (paramsDialog.dialogType === DialogUserType.LOGOUT) {
-        this.sendNotification(paramsDialog, Action.RENAME);
       }
     });
   }
@@ -114,32 +112,10 @@ export class ChatComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.socketService.login();
     // this.socketService.send({
     //   from: this.user,
     //   content: message
     // });
     this.messageContent = null;
-  }
-
-  public sendNotification(params: any, action: Action): void {
-    let message: com.raven.common.protos.RavenMessage;
-
-    // if (action === Action.JOINED) {
-    //   message = {
-    //     from: this.user,
-    //     action: action
-    //   }
-    // } else if (action === Action.RENAME) {
-    //   message = {
-    //     action: action,
-    //     content: {
-    //       username: this.user.name,
-    //       previousUsername: params.previousUsername
-    //     }
-    //   };
-    // }
-
-    // this.socketService.send(message);
   }
 }
