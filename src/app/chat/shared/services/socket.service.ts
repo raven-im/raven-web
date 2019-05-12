@@ -3,18 +3,15 @@ import { map } from 'rxjs/operators';
 import * as Rx from 'rxjs/Rx';
 import { com } from 'assets/message';
 import { Subject } from 'rxjs/Rx';
-import { RestService } from './rest.service';
 @Injectable()
 export class SocketService {
 
     private msgMap = new Map<string, any>();
     private clientId: number = 1;
-    private isLogin: boolean = false;
+    public isLogin: boolean = false;
 
     private subject: Rx.Subject<MessageEvent>;
     public messages: Subject<com.raven.common.protos.RavenMessage>;
-
-    constructor(private restClient: RestService) { }
 
 	private connect(url): Rx.Subject<MessageEvent> {
 		if (!this.subject) {
@@ -96,10 +93,6 @@ export class SocketService {
 
                     //get Conversation list.
                     this.getAllConversationList(this.clientId);
-                    //get Contacts list.
-                    this.restClient.getUsers().subscribe((list) => {
-                        console.log("User list length:");
-                    });
                 }
                 break;
             case com.raven.common.protos.RavenMessage.Type.HeartBeat:

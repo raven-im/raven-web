@@ -1,20 +1,23 @@
 <mat-sidenav-container fullscreen>
   <mat-sidenav #sidenav>
     <mat-nav-list>
-      <a mat-list-item href="https://luixaviles.com" target="_blank">
+      <h3 matSubheader>Contacts</h3>
+      <mat-list-item *ngFor="let contact of contacts">
         <mat-icon mat-list-icon>person</mat-icon>
-        <span mat-line>Contacts</span>
-      </a>
-      <a mat-list-item href="https://medium.com/dailyjs/real-time-apps-with-typescript-integrating-web-sockets-node-angular-e2b57cbd1ec1" target="_blank">
+        <span mat-line>{{contact}}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <h3 matSubheader>Conversations</h3>
+      <mat-list-item>
         <mat-icon mat-list-icon>message</mat-icon>
         <span mat-line>Conversations</span>
-      </a>
+      </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
 
   <div>
     <mat-toolbar color="primary">
-      <button mat-icon-button (click)="sidenav.toggle()">
+      <button mat-icon-button (click)="sidenav.toggle(); getContacts()">
       <mat-icon>menu</mat-icon>
     </button>
       <span>Raven IM</span>

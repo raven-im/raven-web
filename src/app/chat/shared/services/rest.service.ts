@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginParam } from '../model/loginParam';
 import { LoginResult } from '../model/loginResult';
 import { AccessResult } from '../model/accessResult';
+import { UsersResult } from '../model/usersResult';
 
 const APP_SERVER_URL = 'http://localhost:8080/api';
 const IM_SERVER_URL = 'http://localhost:8060/route';
@@ -24,8 +25,8 @@ export class RestService {
     return this.http.post<LoginResult>(APP_SERVER_URL + GET_TOKEN, param, httpOptions);
   }
   // app server.
-  getUsers(): Observable<LoginResult> { //TODO
-    return this.http.get<LoginResult>(APP_SERVER_URL + GET_USER_LIST);
+  getUsers(): Observable<UsersResult> {
+    return this.http.get<UsersResult>(APP_SERVER_URL + GET_USER_LIST + '?type=1');
   }
   // im server.
   getAccess(key: string, token: string): Observable<AccessResult> {
