@@ -51,11 +51,10 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
     this.initModel();
 
     this.socketService.emitter.subscribe((msg: com.raven.common.protos.RavenMessage) => {
-      console.log("msg pushed");
       let message: Message = {
         from: msg.upDownMessage.fromUid == this.user.uid ? this.user : this.targetUser,
         content: msg.upDownMessage.content.content,
-        time: new Date(msg.upDownMessage.content.time.toString())
+        time: new Date(+msg.upDownMessage.content.time.toString())
       }
       this.messages.push(message);
     })
