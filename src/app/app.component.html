@@ -10,7 +10,15 @@
       <h3 matSubheader>Conversations</h3>
       <a mat-list-item *ngFor="let conversation of conversations" routerLink="" (click)="sidenav.toggle()">
         <mat-icon mat-list-icon>message</mat-icon>
-        <span mat-line>{{conversation.name}}</span>
+        <h3 mat-line>
+          <b>{{conversation.name}}</b>
+        </h3>
+        <p mat-line>
+          {{conversation.lastMsg}}
+        </p>
+        <h5 mat-line>
+          {{conversation.time | date:'MM-dd HH:mm'}}
+        </h5>
       </a>
     </mat-nav-list>
   </mat-sidenav>

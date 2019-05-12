@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
 
   getContacts(): void {
     //get Contacts list.
+    this.contacts = new Array<UsersOutParam>();
     if (this.socketClient.isLogin) {
       this.restClient.getUsers().subscribe((result) => {
         console.log("User list length:" + result.data.length);
