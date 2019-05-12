@@ -29,8 +29,11 @@ export class AppComponent implements OnInit {
     if (this.socketClient.isLogin) {
       this.restClient.getUsers().subscribe((result) => {
         console.log("User list length:" + result.data.length);
+        let loginUser = this.socketClient.loginUserId;
         result.data.forEach((contact) => {
-          this.contacts.push(contact);
+          if (loginUser != contact.id) {
+            this.contacts.push(contact);
+          }
         });
       });
     }

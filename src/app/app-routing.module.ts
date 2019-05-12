@@ -1,10 +1,22 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ChatComponent } from './chat/chat.component';
+import { ChatDetailComponent } from './chat/chat.detail.component';
 
 const routes: Routes = [
+  { 
+    path: 'chat/:id',      
+    component: ChatDetailComponent 
+  },
   {
-    path: '', component: ChatComponent
+    path: 'chat',
+    component: ChatComponent,
+    data: { title: 'Chat' }
+  },
+  { 
+    path: '',
+    redirectTo: '/chat',
+    pathMatch: 'full'
   }
 ];
 

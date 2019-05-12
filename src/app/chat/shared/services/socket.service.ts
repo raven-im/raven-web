@@ -9,6 +9,7 @@ export class SocketService {
     private msgMap = new Map<string, any>();
     private clientId: number = 1;
     public isLogin: boolean = false;
+    public loginUserId: string;
 
     private subject: Rx.Subject<MessageEvent>;
     public messages: Subject<com.raven.common.protos.RavenMessage>;
@@ -33,6 +34,7 @@ export class SocketService {
         };
         ws.onclose = function (event) {
             that.isLogin = false;
+            that.loginUserId = null;
             ws.close(); //TODO
         }
 		let observable = Rx.Observable.create(
@@ -89,6 +91,7 @@ export class SocketService {
                 let loginAck = msg.loginAck;
                 if (loginAck.code === com.raven.common.protos.Code.SUCCESS && this.msgMap.has(loginAck.id.toString())) {
                     this.isLogin = true;
+                    this.loginUserId = localStorage.getItem("user");
                     this.msgMap.delete(loginAck.id.toString());
 
                     //get Conversation list.
