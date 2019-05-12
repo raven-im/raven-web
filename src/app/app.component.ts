@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from './chat/shared/services/socket.service';
 import { RestService } from './chat/shared/services/rest.service';
+import { UsersOutParam } from './chat/shared/model/usersOutParam';
 
 @Component({
   selector: 'tcc-root',
@@ -9,7 +10,7 @@ import { RestService } from './chat/shared/services/rest.service';
 })
 export class AppComponent implements OnInit {
 
-  contacts: Array<string>;
+  contacts: Array<UsersOutParam>;
 
   constructor(
     private socketClient: SocketService,
@@ -24,12 +25,12 @@ export class AppComponent implements OnInit {
 
   getContacts(): void {
     //get Contacts list.
-    this.contacts = new Array<string>();
+    this.contacts = new Array<UsersOutParam>();
     if (this.socketClient.isLogin) {
       this.restClient.getUsers().subscribe((result) => {
         console.log("User list length:" + result.data.length);
         result.data.forEach((contact) => {
-          this.contacts.push(contact.name);
+          this.contacts.push(contact);
         });
       });
     }
