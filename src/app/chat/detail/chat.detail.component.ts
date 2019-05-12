@@ -1,8 +1,5 @@
 import { Component, OnInit, ViewChildren, ViewChild, AfterViewInit, QueryList, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogRef, MatList, MatListItem } from '@angular/material';
-
-import { Action } from '../shared/model/action';
-import { Event } from '../shared/model/event';
 // import { Message } from './shared/model/message';
 import { User } from '../shared/model/user';
 import { SocketService } from '../shared/services/socket.service';
@@ -10,6 +7,8 @@ import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 import { DialogUserType } from '../dialog-user/dialog-user-type';
 import { com } from 'assets/message';
 import { ActivatedRoute } from '@angular/router';
+import { RestService } from '../shared/services/rest.service';
+import { Message } from '../shared/model/message';
 
 
 const AVATAR_URL = 'https://api.adorable.io/avatars/285';
@@ -20,11 +19,12 @@ const AVATAR_URL = 'https://api.adorable.io/avatars/285';
   styleUrls: ['./chat.detail.component.css']
 })
 export class ChatDetailComponent implements OnInit, AfterViewInit {
-  action = Action;
   user: User;
-  messages: com.raven.common.protos.RavenMessage[] = [];
+  targetUser: User;
+
+  messages: Message[] = [];
+  // messages: com.raven.common.protos.RavenMessage[] = [];
   messageContent: string;
-  ioConnection: any;
   dialogRef: MatDialogRef<DialogUserComponent> | null;
   defaultDialogUserParams: any = {
     disableClose: true,
@@ -41,14 +41,24 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
   // getting a reference to the items/messages within the list
   @ViewChildren(MatListItem, { read: ElementRef }) matListItems: QueryList<MatListItem>;
 
-  constructor(private socketService: SocketService,
+  constructor(
+    private restClient: RestService,
+    private socketService: SocketService,
     private route: ActivatedRoute,
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    const targetId = this.route.snapshot.paramMap.get('id');
-    console.log("Detail init " + targetId);
     this.initModel();
+
+    this.socketService.emitter.subscribe((msg: com.raven.common.protos.RavenMessage) => {
+      console.log("msg pushed");
+      let message: Message = {
+        from: msg.upDownMessage.fromUid == this.user.uid ? this.user : this.targetUser,
+        content: msg.upDownMessage.content.content,
+        time: new Date(msg.upDownMessage.content.time.toString())
+      }
+      this.messages.push(message);
+    })
   }
 
   ngAfterViewInit(): void {
@@ -68,11 +78,27 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
   }
 
   private initModel(): void {
-    const randomId = this.getRandomId();
-    this.user = {
-      id: randomId,
-      avatar: `${AVATAR_URL}/${randomId}.png`
-    };
+    let targetId = this.route.snapshot.paramMap.get('id');
+    let randomId = this.getRandomId();
+    let that = this;
+    
+    this.restClient.getUserDetail(this.socketService.loginUserId).subscribe((result) => {
+      that.user = {
+        uid: result.data.id,
+        name: result.data.name,
+        avatar: `${AVATAR_URL}/${randomId}.png`
+      };
+    });
+
+    randomId = this.getRandomId();
+    this.restClient.getUserDetail(targetId).subscribe((result) => {
+      that.targetUser = {
+        uid: result.data.id,
+        name: result.data.name,
+        avatar: `${AVATAR_URL}/${randomId}.png`
+      };
+    });
+
   }
 
   private initIoConnection(): void {
@@ -113,10 +139,13 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    // this.socketService.send({
-    //   from: this.user,
-    //   content: message
-    // });
+    this.socketService.sendSingleMessage(
+      this.socketService.loginUserId,
+      this.targetUser.uid,
+      com.raven.common.protos.MessageType.TEXT,
+      message,
+      null
+    );
     this.messageContent = null;
   }
 }

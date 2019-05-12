@@ -5,12 +5,14 @@ import { LoginParam } from '../model/loginParam';
 import { LoginResult } from '../model/loginResult';
 import { AccessResult } from '../model/accessResult';
 import { UsersResult } from '../model/usersResult';
+import { UserDetailResult } from '../model/usersDetailResult';
 
 const APP_SERVER_URL = 'http://localhost:8080/api';
 const IM_SERVER_URL = 'http://localhost:8060/route';
 const GET_TOKEN = '/user/login';
 const GET_ACCESS_NODE = '/user/access';
 const GET_USER_LIST = '/user/list';
+const GET_USER_DETAIL = '/user/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json'})
@@ -27,6 +29,10 @@ export class RestService {
   // app server.
   getUsers(): Observable<UsersResult> {
     return this.http.get<UsersResult>(APP_SERVER_URL + GET_USER_LIST + '?type=1');
+  }
+
+  getUserDetail(uid: string): Observable<UserDetailResult> {
+    return this.http.get<UserDetailResult>(APP_SERVER_URL + GET_USER_DETAIL + uid);
   }
   // im server.
   getAccess(key: string, token: string): Observable<AccessResult> {

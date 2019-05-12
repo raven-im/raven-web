@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { map } from 'rxjs/operators';
 import * as Rx from 'rxjs/Rx';
 import { com } from 'assets/message';
@@ -13,6 +13,7 @@ export class SocketService {
 
     private subject: Rx.Subject<MessageEvent>;
     public messages: Subject<com.raven.common.protos.RavenMessage>;
+    public emitter = new EventEmitter();
 
 	private connect(url): Rx.Subject<MessageEvent> {
 		if (!this.subject) {
@@ -110,7 +111,7 @@ export class SocketService {
                     console.log("error: map not contain " + msgAck.cid);
                 } 
                 if (msgAck.code === com.raven.common.protos.Code.SUCCESS) {
-                    //TODO message sent success. add Original Msg to Chat List.
+                    this.emitter.emit(original);
                 } else {
                     console.log("error: message ack fail. ");
                 }
@@ -147,13 +148,12 @@ export class SocketService {
                 break;
             case com.raven.common.protos.RavenMessage.Type.UpDownMessage:
                 console.log("new incoming messages.");
-                //DB insert  Chat List insert, Conversation list update.
-                
+                this.emitter.emit(msg);
                 break;
             }
     }
 
-    public send(message: com.raven.common.protos.RavenMessage): void {
+    private send(message: com.raven.common.protos.RavenMessage): void {
         if (this.isLogin) {
             this.sendMsg(message);
         } else {
@@ -210,7 +210,7 @@ export class SocketService {
     }
 
     // Conversation Request. ALL
-    private getAllConversationList(id: number): void {
+    public getAllConversationList(id: number): void {
         let request = com.raven.common.protos.ConverReq.create({
             id: id, 
             type: com.raven.common.protos.OperationType.ALL
@@ -224,7 +224,7 @@ export class SocketService {
     }
     
     // Conversation Request. DETAIL
-    private getDetailConversationList(id: number, cid: string): void {
+    public getDetailConversationList(id: number, cid: string): void {
         let request = com.raven.common.protos.ConverReq.create({
             id: id, 
             type: com.raven.common.protos.OperationType.DETAIL,
@@ -239,7 +239,7 @@ export class SocketService {
     }
     
     //Single Message.
-    private sendSingleMessage(id: number, fromId: string, targetId: string, 
+    public sendSingleMessage(fromId: string, targetId: string, 
         type: com.raven.common.protos.MessageType, content: string, convId: string): void {
         let msgContent = com.raven.common.protos.MessageContent.create({
             uid: fromId,
@@ -249,7 +249,7 @@ export class SocketService {
         });
 
         let upMsg = com.raven.common.protos.UpDownMessage.create({
-            cid: id, 
+            cid: this.clientId, 
             fromUid: fromId,
             targetUid: targetId,
             converType: com.raven.common.protos.ConverType.SINGLE,
@@ -265,7 +265,7 @@ export class SocketService {
     }
     
     //Group Message.
-    private sendGroupMessage(id: number, fromId: string, targetId: string, 
+    public sendGroupMessage(id: number, fromId: string, targetId: string, 
         type: com.raven.common.protos.MessageType, content: string, groupId: string, convId: string): void {
         let msgContent = com.raven.common.protos.MessageContent.create({
             uid: fromId,
@@ -292,7 +292,7 @@ export class SocketService {
     }
     
     // get Message List.
-    private getMessageList(id: number, convId: string, beginTime: number): void {
+    public getMessageList(id: number, convId: string, beginTime: number): void {
         let request = com.raven.common.protos.HisMessagesReq.create({
             id: id, 
             converId: convId,

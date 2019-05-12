@@ -1,15 +1,9 @@
-import { Component, OnInit, ViewChildren, ViewChild, AfterViewInit, QueryList, ElementRef } from '@angular/core';
-import { MatDialog, MatDialogRef, MatList, MatListItem } from '@angular/material';
-
-import { Action } from '../shared/model/action';
-import { Event } from '../shared/model/event';
-// import { Message } from './shared/model/message';
+import { Component, OnInit} from '@angular/core';
+import { MatDialog, MatDialogRef} from '@angular/material';
 import { User } from '../shared/model/user';
 import { SocketService } from '../shared/services/socket.service';
 import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 import { DialogUserType } from '../dialog-user/dialog-user-type';
-import { com } from 'assets/message';
-
 
 const AVATAR_URL = 'https://api.adorable.io/avatars/285';
 
@@ -18,12 +12,9 @@ const AVATAR_URL = 'https://api.adorable.io/avatars/285';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, AfterViewInit {
-  action = Action;
+export class ChatComponent implements OnInit {
   user: User;
-  messages: com.raven.common.protos.RavenMessage[] = [];
   messageContent: string;
-  ioConnection: any;
   dialogRef: MatDialogRef<DialogUserComponent> | null;
   defaultDialogUserParams: any = {
     disableClose: true,
@@ -33,13 +24,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }
   };
 
-  // getting a reference to the overall list, which is the parent container of the list items
-  @ViewChild(MatList, { read: ElementRef }) matList: ElementRef;
-
-  // getting a reference to the items/messages within the list
-  @ViewChildren(MatListItem, { read: ElementRef }) matListItems: QueryList<MatListItem>;
-
-  constructor(private socketService: SocketService,
+  constructor(
+    private socketService: SocketService,
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -50,26 +36,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }, 0);
   }
 
-  ngAfterViewInit(): void {
-    // subscribing to any changes in the list of items / messages
-    this.matListItems.changes.subscribe(elements => {
-      this.scrollToBottom();
-    });
-  }
-
-  // auto-scroll fix: inspired by this stack overflow post
-  // https://stackoverflow.com/questions/35232731/angular2-scroll-to-bottom-chat-style
-  private scrollToBottom(): void {
-    try {
-      this.matList.nativeElement.scrollTop = this.matList.nativeElement.scrollHeight;
-    } catch (err) {
-    }
-  }
-
   private initModel(): void {
     const randomId = this.getRandomId();
     this.user = {
-      id: randomId,
       avatar: `${AVATAR_URL}/${randomId}.png`
     };
   }
@@ -111,11 +80,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
     if (!message) {
       return;
     }
-
-    // this.socketService.send({
-    //   from: this.user,
-    //   content: message
-    // });
     this.messageContent = null;
   }
 }
