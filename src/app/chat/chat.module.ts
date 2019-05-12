@@ -4,11 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../shared/material/material.module';
 
-import { ChatComponent } from './chat.component';
+import { ChatComponent } from './login/chat.component';
 import { SocketService } from './shared/services/socket.service';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { RestService } from './shared/services/rest.service';
-import { ChatDetailComponent } from './chat.detail.component';
+import { ChatDetailComponent } from './detail/chat.detail.component';
 
 @NgModule({
   imports: [

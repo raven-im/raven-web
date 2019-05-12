@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChildren, ViewChild, AfterViewInit, QueryList, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogRef, MatList, MatListItem } from '@angular/material';
 
-import { Action } from './shared/model/action';
-import { Event } from './shared/model/event';
+import { Action } from '../shared/model/action';
+import { Event } from '../shared/model/event';
 // import { Message } from './shared/model/message';
-import { User } from './shared/model/user';
-import { SocketService } from './shared/services/socket.service';
-import { DialogUserComponent } from './dialog-user/dialog-user.component';
-import { DialogUserType } from './dialog-user/dialog-user-type';
+import { User } from '../shared/model/user';
+import { SocketService } from '../shared/services/socket.service';
+import { DialogUserComponent } from '../dialog-user/dialog-user.component';
+import { DialogUserType } from '../dialog-user/dialog-user-type';
 import { com } from 'assets/message';
 import { ActivatedRoute } from '@angular/router';
 
