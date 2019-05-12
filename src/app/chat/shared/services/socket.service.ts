@@ -124,10 +124,8 @@ export class SocketService {
                     console.log("error: map not contain " + convAck.id);
                 } 
                 if (convAck.code === com.raven.common.protos.Code.SUCCESS) {
-                    console.log(" convAck id:" + convAck.id.toString());
-                    console.log(" convAck time:" +convAck.time.toString());
                     if (convAck.converList != null) {
-                        // TODO Conversation List.
+                        this.emitter.emit(msg);
                     } else if (convAck.converInfo.converId != null) {
                         // TODO Conversation Detail.
                     }
@@ -292,9 +290,9 @@ export class SocketService {
     }
     
     // get Message List.
-    public getMessageList(id: number, convId: string, beginTime: number): void {
+    public getMessageList(convId: string, beginTime: number): void {
         let request = com.raven.common.protos.HisMessagesReq.create({
-            id: id, 
+            id: this.clientId, 
             converId: convId,
             beaginTime: beginTime
         });

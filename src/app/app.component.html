@@ -8,10 +8,10 @@
       </a>
       <mat-divider></mat-divider>
       <h3 matSubheader>Conversations</h3>
-      <mat-list-item>
+      <a mat-list-item *ngFor="let conversation of conversations" routerLink="" (click)="sidenav.toggle()">
         <mat-icon mat-list-icon>message</mat-icon>
-        <span mat-line>Conversations</span>
-      </mat-list-item>
+        <span mat-line>{{conversation.name}}</span>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
 
@@ -20,7 +20,7 @@
       <button mat-icon-button (click)="sidenav.toggle(); getContacts()">
       <mat-icon>menu</mat-icon>
     </button>
-      <span>Raven IM</span>
+      <span>Raven</span>
     </mat-toolbar>
 
     <div class="app-content">

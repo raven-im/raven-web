@@ -21,7 +21,6 @@ const AVATAR_URL = 'https://api.adorable.io/avatars/285';
 export class ChatDetailComponent implements OnInit, AfterViewInit {
   user: User;
   targetUser: User;
-
   messages: Message[] = [];
   // messages: com.raven.common.protos.RavenMessage[] = [];
   messageContent: string;
@@ -51,6 +50,9 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
     this.initModel();
 
     this.socketService.emitter.subscribe((msg: com.raven.common.protos.RavenMessage) => {
+      if (msg.upDownMessage == null) {
+        return;
+      }
       let message: Message = {
         from: msg.upDownMessage.fromUid == this.user.uid ? this.user : this.targetUser,
         content: msg.upDownMessage.content.content,
