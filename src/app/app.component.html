@@ -8,7 +8,7 @@
       </a>
       <mat-divider></mat-divider>
       <h3 matSubheader>Conversations</h3>
-      <a mat-list-item *ngFor="let conversation of conversations" routerLink="" (click)="sidenav.toggle()">
+      <a mat-list-item *ngFor="let conversation of conversations" routerLink="/chat/conversation/{{conversation.convId}}" (click)="sidenav.toggle()">
         <mat-icon mat-list-icon>message</mat-icon>
         <h3 mat-line>
           <b>{{conversation.name}}</b>

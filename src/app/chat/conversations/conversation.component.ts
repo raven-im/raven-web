@@ -14,15 +14,15 @@ import { Message } from '../shared/model/message';
 const AVATAR_URL = 'https://api.adorable.io/avatars/285';
 
 @Component({
-  selector: 'tcc-chat-detail',
-  templateUrl: './chat.detail.component.html',
-  styleUrls: ['./chat.detail.component.css']
+  selector: 'tcc-conversation',
+  templateUrl: './conversation.component.html',
+  styleUrls: ['./conversation.component.css']
 })
-export class ChatDetailComponent implements OnInit, AfterViewInit {
+export class ConversationComponent implements OnInit, AfterViewInit {
+  convId: string;
   user: User;
   targetUser: User;
   messages: Message[] = [];
-  // messages: com.raven.common.protos.RavenMessage[] = [];
   messageContent: string;
   dialogRef: MatDialogRef<DialogUserComponent> | null;
   defaultDialogUserParams: any = {
@@ -50,15 +50,40 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
     this.initModel();
 
     this.socketService.emitter.subscribe((msg: com.raven.common.protos.RavenMessage) => {
-      if (msg.upDownMessage == null) {
-        return;
+      if (msg.upDownMessage != null) {
+        let message: Message = {
+          from: msg.upDownMessage.fromUid == this.user.uid ? this.user : this.targetUser,
+          content: msg.upDownMessage.content.content,
+          time: new Date(+msg.upDownMessage.content.time.toString())
+        }
+        this.messages.push(message);
+      } else if (msg.hisMessagesAck != null) {
+        msg.hisMessagesAck.messageList.forEach(msgItem => {
+          let message: Message = {
+            from: msgItem.uid == this.user.uid ? this.user : this.targetUser,
+            content: msgItem.content,
+            time: new Date(+msgItem.time.toString())
+          }
+          this.messages.push(message);
+        })
+      } else if (msg.converAck.converInfo != null) {
+        let randomId = this.getRandomId();
+        let targetId;
+        msg.converAck.converInfo.uidList.forEach(uid => {
+          if (uid != this.user.uid) {
+            targetId = uid;
+          }
+        })
+        this.restClient.getUserDetail(targetId).subscribe((result) => {
+          this.targetUser = {
+            uid: result.data.id,
+            name: result.data.name,
+            avatar: `${AVATAR_URL}/${randomId}.png`
+          };
+          this.socketService.getMessageList(this.convId, 0);
+        });
       }
-      let message: Message = {
-        from: msg.upDownMessage.fromUid == this.user.uid ? this.user : this.targetUser,
-        content: msg.upDownMessage.content.content,
-        time: new Date(+msg.upDownMessage.content.time.toString())
-      }
-      this.messages.push(message);
+      
     })
   }
 
@@ -79,27 +104,18 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
   }
 
   private initModel(): void {
-    let targetId = this.route.snapshot.paramMap.get('id');
+    this.convId = this.route.snapshot.paramMap.get('id');
     let randomId = this.getRandomId();
-    let that = this;
     
     this.restClient.getUserDetail(this.socketService.loginUserId).subscribe((result) => {
-      that.user = {
+      this.user = {
         uid: result.data.id,
         name: result.data.name,
         avatar: `${AVATAR_URL}/${randomId}.png`
       };
     });
 
-    randomId = this.getRandomId();
-    this.restClient.getUserDetail(targetId).subscribe((result) => {
-      that.targetUser = {
-        uid: result.data.id,
-        name: result.data.name,
-        avatar: `${AVATAR_URL}/${randomId}.png`
-      };
-    });
-
+    this.socketService.getDetailConversation(this.convId);
   }
 
   private getRandomId(): number {

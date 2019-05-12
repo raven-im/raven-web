@@ -96,7 +96,7 @@ export class SocketService {
                     this.msgMap.delete(loginAck.id.toString());
 
                     //get Conversation list.
-                    this.getAllConversationList(this.clientId);
+                    this.getAllConversationList();
                 }
                 break;
             case com.raven.common.protos.RavenMessage.Type.HeartBeat:
@@ -127,7 +127,7 @@ export class SocketService {
                     if (convAck.converList != null) {
                         this.emitter.emit(msg);
                     } else if (convAck.converInfo.converId != null) {
-                        // TODO Conversation Detail.
+                        this.emitter.emit(msg);
                     }
                 } else {
                     console.log("error: conversation ack fail. ");
@@ -139,7 +139,7 @@ export class SocketService {
                 if (this.msgMap.has(hisAck.id.toString())) {
                     original = this.msgMap.get(hisAck.id.toString());
                     this.msgMap.delete(hisAck.id.toString());
-                    //TODO History Message Insert.
+                    this.emitter.emit(msg);
                 } else {
                     console.log("error: map not contain " + hisAck.id);
                 }
@@ -208,9 +208,9 @@ export class SocketService {
     }
 
     // Conversation Request. ALL
-    public getAllConversationList(id: number): void {
+    public getAllConversationList(): void {
         let request = com.raven.common.protos.ConverReq.create({
-            id: id, 
+            id: this.clientId, 
             type: com.raven.common.protos.OperationType.ALL
         });
         let message = com.raven.common.protos.RavenMessage.create({
@@ -222,9 +222,9 @@ export class SocketService {
     }
     
     // Conversation Request. DETAIL
-    public getDetailConversationList(id: number, cid: string): void {
+    public getDetailConversation(cid: string): void {
         let request = com.raven.common.protos.ConverReq.create({
-            id: id, 
+            id: this.clientId, 
             type: com.raven.common.protos.OperationType.DETAIL,
             conversationId: cid
         });
