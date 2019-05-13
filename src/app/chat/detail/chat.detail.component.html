@@ -6,8 +6,9 @@
     <mat-list class="chat-list">
       <mat-list-item *ngFor="let message of messages" [ngClass]="[(message.from.uid === uid)? 'chat-list-item': 'chat-list-item-receiver']">
         <h3 mat-line>
-          <span>{{message.from.name}}</span>
-          <b> : {{message.content}} </b>
+          <span *ngIf="message.from.uid != uid">{{message.from.name}}: </span>
+          <span *ngIf="message.from.uid === uid">Me: </span>
+          <b> {{message.content}} </b>
         </h3>
         <h5 mat-line>
           <span> {{message.time | date:'MM-dd HH:mm'}} </span>
