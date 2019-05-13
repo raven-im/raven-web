@@ -6,9 +6,8 @@ import { LoginResult } from '../model/loginResult';
 import { AccessResult } from '../model/accessResult';
 import { UsersResult } from '../model/usersResult';
 import { UserDetailResult } from '../model/usersDetailResult';
+import { environment } from 'environments/environment';
 
-const APP_SERVER_URL = 'http://localhost:8080/api';
-const IM_SERVER_URL = 'http://localhost:8060/route';
 const GET_TOKEN = '/user/login';
 const GET_ACCESS_NODE = '/user/access';
 const GET_USER_LIST = '/user/list';
@@ -24,22 +23,22 @@ export class RestService {
 
   // app server.
   login(param: LoginParam): Observable<LoginResult> {
-    return this.http.post<LoginResult>(APP_SERVER_URL + GET_TOKEN, param, httpOptions);
+    return this.http.post<LoginResult>(environment.APP_SERVER_URL + GET_TOKEN, param, httpOptions);
   }
   // app server.
   getUsers(): Observable<UsersResult> {
-    return this.http.get<UsersResult>(APP_SERVER_URL + GET_USER_LIST + '?type=1');
+    return this.http.get<UsersResult>(environment.APP_SERVER_URL + GET_USER_LIST + '?type=1');
   }
 
   getUserDetail(uid: string): Observable<UserDetailResult> {
-    return this.http.get<UserDetailResult>(APP_SERVER_URL + GET_USER_DETAIL + uid);
+    return this.http.get<UserDetailResult>(environment.APP_SERVER_URL + GET_USER_DETAIL + uid);
   }
   // im server.
   getAccess(key: string, token: string): Observable<AccessResult> {
     let urlOptions = {
       headers: new HttpHeaders({ 'AppKey': key, 'Token': token})
     };
-    return this.http.get<AccessResult>(IM_SERVER_URL + GET_ACCESS_NODE, urlOptions);
+    return this.http.get<AccessResult>(environment.IM_SERVER_URL + GET_ACCESS_NODE, urlOptions);
   }
 
   showErrorMsg(code: number): string {
