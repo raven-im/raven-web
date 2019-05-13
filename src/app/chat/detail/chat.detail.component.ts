@@ -20,6 +20,7 @@ const AVATAR_URL = 'https://api.adorable.io/avatars/285';
 })
 export class ChatDetailComponent implements OnInit, AfterViewInit {
   user: User;
+  uid: string;
   targetUser: User;
   messages: Message[] = [];
   // messages: com.raven.common.protos.RavenMessage[] = [];
@@ -54,7 +55,7 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
         return;
       }
       let message: Message = {
-        from: msg.upDownMessage.fromUid == this.socketService.loginUserId ? this.user : this.targetUser,
+        from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
         content: msg.upDownMessage.content.content,
         time: new Date(+msg.upDownMessage.content.time.toString())
       }
@@ -79,11 +80,13 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
   }
 
   private initModel(): void {
+    this.uid = this.socketService.loginUserId;
+    this.messages.length = 0;
     let targetId = this.route.snapshot.paramMap.get('id');
     let randomId = this.getRandomId();
     let that = this;
     
-    this.restClient.getUserDetail(this.socketService.loginUserId).subscribe((result) => {
+    this.restClient.getUserDetail(this.uid).subscribe((result) => {
       that.user = {
         uid: result.data.id,
         name: result.data.name,
@@ -136,7 +139,7 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
     }
 
     this.socketService.sendSingleMessage(
-      this.socketService.loginUserId,
+      this.uid,
       this.targetUser.uid,
       com.raven.common.protos.MessageType.TEXT,
       message,

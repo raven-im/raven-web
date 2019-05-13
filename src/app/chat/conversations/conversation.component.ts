@@ -20,9 +20,10 @@ const AVATAR_URL = 'https://api.adorable.io/avatars/285';
 })
 export class ConversationComponent implements OnInit, AfterViewInit {
   convId: string;
+  uid: string; // login uid
   user: User;
   targetUser: User;
-  messages: Message[] = [];
+  messages: Array<Message>;
   messageContent: string;
   dialogRef: MatDialogRef<DialogUserComponent> | null;
   defaultDialogUserParams: any = {
@@ -51,16 +52,20 @@ export class ConversationComponent implements OnInit, AfterViewInit {
 
     this.socketService.emitter.subscribe((msg: com.raven.common.protos.RavenMessage) => {
       if (msg.upDownMessage != null) {
-        let message: Message = {
-          from: msg.upDownMessage.fromUid == this.socketService.loginUserId ? this.user : this.targetUser,
-          content: msg.upDownMessage.content.content,
-          time: new Date(+msg.upDownMessage.content.time.toString())
+        if (msg.upDownMessage.fromUid === this.uid 
+        || (msg.upDownMessage.fromUid === this.targetUser.uid && msg.upDownMessage.targetUid === this.uid)) {
+          let message: Message = {
+            from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
+            content: msg.upDownMessage.content.content,
+            time: new Date(+msg.upDownMessage.content.time.toString())
+          }
+          this.messages.push(message);
         }
-        this.messages.push(message);
       } else if (msg.hisMessagesAck != null) {
+        this.messages.length = 0;
         msg.hisMessagesAck.messageList.forEach(msgItem => {
           let message: Message = {
-            from: msgItem.uid == this.socketService.loginUserId ? this.user : this.targetUser,
+            from: msgItem.uid == this.uid ? this.user : this.targetUser,
             content: msgItem.content,
             time: new Date(+msgItem.time.toString())
           }
@@ -70,7 +75,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
         let randomId = this.getRandomId();
         let targetId;
         msg.converAck.converInfo.uidList.forEach(uid => {
-          if (uid != this.socketService.loginUserId) {
+          if (uid != this.uid) {
             targetId = uid;
           }
         })
@@ -104,10 +109,12 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   }
 
   private initModel(): void {
+    this.uid = this.socketService.loginUserId;
+    this.messages = new Array<Message>();
     this.convId = this.route.snapshot.paramMap.get('id');
     let randomId = this.getRandomId();
     
-    this.restClient.getUserDetail(this.socketService.loginUserId).subscribe((result) => {
+    this.restClient.getUserDetail(this.uid).subscribe((result) => {
       this.user = {
         uid: result.data.id,
         name: result.data.name,
@@ -152,7 +159,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     }
 
     this.socketService.sendSingleMessage(
-      this.socketService.loginUserId,
+      this.uid,
       this.targetUser.uid,
       com.raven.common.protos.MessageType.TEXT,
       message,

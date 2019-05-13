@@ -7,11 +7,13 @@ import { ConversationComponent } from './chat/conversations/conversation.compone
 const routes: Routes = [
   { 
     path: 'chat/:id',      
-    component: ChatDetailComponent 
+    component: ChatDetailComponent,
+    data: {reuse: false}
   },
   { 
     path: 'chat/conversation/:id',      
-    component: ConversationComponent 
+    component: ConversationComponent,
+    data: {reuse: false}
   },
   {
     path: 'chat',
