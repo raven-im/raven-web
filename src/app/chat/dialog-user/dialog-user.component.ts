@@ -83,12 +83,12 @@ export class DialogUserComponent implements OnInit {
     this.router.navigateByUrl('/chat');
   }
 
-  private showErrorMsg(code: number): void {
+  showErrorMsg(code: number): void {
     this.showError = true;
     this.errMsg = this.restClient.showErrorMsg(code);
   }
 
-  private resetErrorMsg(): void {
+  resetErrorMsg(): void {
     this.showError = false;
     this.errMsg = "";
   }
