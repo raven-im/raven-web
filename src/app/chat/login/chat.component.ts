@@ -4,9 +4,6 @@ import { User } from '../shared/model/user';
 import { SocketService } from '../shared/services/socket.service';
 import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 import { DialogUserType } from '../dialog-user/dialog-user-type';
-
-const AVATAR_URL = 'https://api.adorable.io/avatars/285';
-
 @Component({
   selector: 'tcc-chat',
   templateUrl: './chat.component.html',
@@ -37,9 +34,8 @@ export class ChatComponent implements OnInit {
   }
 
   private initModel(): void {
-    const randomId = this.getRandomId();
     this.user = {
-      avatar: `${AVATAR_URL}/${randomId}.png`
+
     };
   }
 

@@ -14,6 +14,9 @@ export class ContactService {
     }
 
   getUsers(): void {
+    if (this.contacts.size > 0) {
+      return;
+    }
     this.restClient.getUsers().subscribe((result) => {
       console.log("User list length:" + result.data.length);
       let loginUser = this.socketClient.loginUserId;
@@ -51,4 +54,7 @@ export class ContactService {
     return array;
   }
   
+  clear(): void {
+    this.contacts.clear();
+  }
 }

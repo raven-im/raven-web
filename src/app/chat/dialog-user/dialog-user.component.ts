@@ -5,6 +5,7 @@ import { RestService } from '../shared/services/rest.service';
 import { LoginParam } from '../shared/model/loginParam';
 import { DialogUserType } from './dialog-user-type';
 import { ContactService } from '../shared/services/contact.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tcc-dialog-user',
@@ -21,6 +22,7 @@ export class DialogUserComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<DialogUserComponent>,
     @Inject(MAT_DIALOG_DATA) public params: any,
     public restClient: RestService,
+    private router: Router,
     public contactService: ContactService) {
     this.previousUsername = params.username ? params.username : undefined;
     this.showError = false;
@@ -71,10 +73,14 @@ export class DialogUserComponent implements OnInit {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('access-node');
+    // this.contactService.clear();
+
+    //TODO clean conversation list.
 
     this.dialogRef.close({
       dialogType: DialogUserType.LOGIN
     });
+    this.router.navigateByUrl('/chat');
   }
 
   private showErrorMsg(code: number): void {
