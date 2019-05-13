@@ -30,7 +30,19 @@
     margin-top: 2px;
     margin-bottom: 2px;
     border-radius: 5px;
+    margin-left: 50%;
+    width: 50%;
     background-color: #E8EAF6;
+    text-align:right
+}
+
+.chat-list-item-receiver {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    border-radius: 5px;
+    margin-right: 50%;
+    width: 50%;
+    background-color: rgb(184, 189, 219);
 }
 
 .main-card {
@@ -46,4 +58,8 @@
 
 .chat-notification {
     text-align: center;
+}
+
+.chat-list-item-avatar {
+    margin-left: 80%
 }

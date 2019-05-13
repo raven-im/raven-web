@@ -7,5 +7,6 @@ export interface Conversation {
     groupId?: string,
     lastMsg?: string;
     unReadCnt?: number;
-    time?: Date
+    targetUser?: string;
+    time?: Date;
 }

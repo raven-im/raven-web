@@ -11,6 +11,7 @@ import { RestService } from './shared/services/rest.service';
 import { ChatDetailComponent } from './detail/chat.detail.component';
 import { ConversationComponent } from './conversations/conversation.component';
 import { ContactService } from './shared/services/contact.service';
+import { ConversationService } from './shared/services/conversation.service';
 
 @NgModule({
   imports: [
@@ -20,7 +21,7 @@ import { ContactService } from './shared/services/contact.service';
     MaterialModule
   ],
   declarations: [ChatComponent, DialogUserComponent, ChatDetailComponent, ConversationComponent],
-  providers: [SocketService, RestService, ContactService],
+  providers: [SocketService, RestService, ContactService, ConversationService],
   entryComponents: [DialogUserComponent]
 })
 export class ChatModule { }

@@ -6,7 +6,7 @@ import { UsersOutParam } from '../model/usersOutParam';
 @Injectable()
 export class ContactService {
 
-  public contacts: Map<string, UsersOutParam>;
+  private contacts: Map<string, UsersOutParam>;
   constructor(
     private restClient: RestService,
     private socketClient: SocketService) { 

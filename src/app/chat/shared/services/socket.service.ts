@@ -112,6 +112,8 @@ export class SocketService {
                 } 
                 if (msgAck.code === com.raven.common.protos.Code.SUCCESS) {
                     this.emitter.emit(original);
+                    //get Conversation list.
+                    this.getAllConversationList();
                 } else {
                     console.log("error: message ack fail. ");
                 }
@@ -147,6 +149,9 @@ export class SocketService {
             case com.raven.common.protos.RavenMessage.Type.UpDownMessage:
                 console.log("new incoming messages.");
                 this.emitter.emit(msg);
+
+                //get Conversation list.
+                this.getAllConversationList();
                 break;
             }
     }

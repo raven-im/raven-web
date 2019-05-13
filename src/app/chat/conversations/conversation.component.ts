@@ -9,6 +9,7 @@ import { com } from 'assets/message';
 import { ActivatedRoute } from '@angular/router';
 import { Message } from '../shared/model/message';
 import { ContactService } from '../shared/services/contact.service';
+import { ConversationService } from '../shared/services/conversation.service';
 
 
 const AVATAR_URL = 'https://api.adorable.io/avatars/285';
@@ -42,6 +43,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   @ViewChildren(MatListItem, { read: ElementRef }) matListItems: QueryList<MatListItem>;
 
   constructor(
+    private convService: ConversationService,
     private contactService: ContactService,
     private socketService: SocketService,
     private route: ActivatedRoute,
@@ -71,20 +73,6 @@ export class ConversationComponent implements OnInit, AfterViewInit {
           }
           this.messages.push(message);
         })
-      } else if (msg.converAck.converInfo != null) {
-        let randomId = this.getRandomId();
-        let targetId;
-        msg.converAck.converInfo.uidList.forEach(uid => {
-          if (uid != this.uid) {
-            targetId = uid;
-          }
-        })
-        this.targetUser = {
-          uid: targetId,
-          name: this.contactService.getUserDetail(targetId).name,
-          avatar: `${AVATAR_URL}/${randomId}.png`
-        };
-        this.socketService.getMessageList(this.convId, 0);
       }
     })
   }
@@ -117,7 +105,14 @@ export class ConversationComponent implements OnInit, AfterViewInit {
       avatar: `${AVATAR_URL}/${randomId}.png`
     };
 
-    this.socketService.getDetailConversation(this.convId);
+    randomId = this.getRandomId();
+    let detail = this.convService.getConversationDetail(this.convId);
+    this.targetUser = {
+      uid: detail.targetUser,
+      name: this.contactService.getUserDetail(detail.targetUser).name,
+      avatar: `${AVATAR_URL}/${randomId}.png`
+    };
+    this.socketService.getMessageList(this.convId, 0);
   }
 
   private getRandomId(): number {
