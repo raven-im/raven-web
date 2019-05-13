@@ -2,7 +2,7 @@
   <mat-sidenav #sidenav>
     <mat-nav-list>
       <h3 matSubheader>Contacts</h3>
-      <a mat-list-item *ngFor="let contact of contacts" routerLink="/chat/{{contact.id}}" (click)="sidenav.toggle()">
+      <a mat-list-item *ngFor="let contact of contacts" (click)="sidenav.toggle(); contactItemClick(contact.id)">
         <mat-icon mat-list-icon>person</mat-icon>
         <span mat-line>{{contact.name}}</span>
       </a>

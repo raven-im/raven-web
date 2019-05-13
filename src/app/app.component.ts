@@ -3,8 +3,7 @@ import { UsersOutParam } from './chat/shared/model/usersOutParam';
 import { Conversation } from './chat/shared/model/conversation';
 import { ContactService } from './chat/shared/services/contact.service';
 import { ConversationService } from './chat/shared/services/conversation.service';
-import { Route } from '@angular/router';
-import { containsTree } from '@angular/router/src/url_tree';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tcc-root',
@@ -16,7 +15,7 @@ export class AppComponent implements OnInit {
   contacts: UsersOutParam[] = [];
   conversations: Conversation[] = [];
   constructor(
-    private router: Route,
+    private router: Router,
     private convClient: ConversationService,
     private contactService: ContactService) { }
 
@@ -38,8 +37,18 @@ export class AppComponent implements OnInit {
     this.conversations = this.convClient.getConversationList();
   }
 
-  contactItemClick(): void {
-    // routerLink="/chat/{{contact.id}}" 
-    console.log('userId');
+  contactItemClick(contactId: string): void {
+    let convId = null;
+    this.conversations.forEach(conversation => {
+      if (contactId === conversation.targetUser) {
+        convId = conversation.convId;
+        return;
+      }
+    });
+    if (convId != null) {
+      this.router.navigateByUrl('/chat/conversation/' + convId);
+    } else {
+      this.router.navigateByUrl('/chat/' + contactId);
+    }
   }
 }
