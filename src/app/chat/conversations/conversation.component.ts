@@ -52,7 +52,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     this.socketService.emitter.subscribe((msg: com.raven.common.protos.RavenMessage) => {
       if (msg.upDownMessage != null) {
         let message: Message = {
-          from: msg.upDownMessage.fromUid == this.user.uid ? this.user : this.targetUser,
+          from: msg.upDownMessage.fromUid == this.socketService.loginUserId ? this.user : this.targetUser,
           content: msg.upDownMessage.content.content,
           time: new Date(+msg.upDownMessage.content.time.toString())
         }
@@ -60,7 +60,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
       } else if (msg.hisMessagesAck != null) {
         msg.hisMessagesAck.messageList.forEach(msgItem => {
           let message: Message = {
-            from: msgItem.uid == this.user.uid ? this.user : this.targetUser,
+            from: msgItem.uid == this.socketService.loginUserId ? this.user : this.targetUser,
             content: msgItem.content,
             time: new Date(+msgItem.time.toString())
           }
@@ -70,7 +70,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
         let randomId = this.getRandomId();
         let targetId;
         msg.converAck.converInfo.uidList.forEach(uid => {
-          if (uid != this.user.uid) {
+          if (uid != this.socketService.loginUserId) {
             targetId = uid;
           }
         })

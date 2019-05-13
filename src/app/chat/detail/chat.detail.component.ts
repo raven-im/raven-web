@@ -54,7 +54,7 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
         return;
       }
       let message: Message = {
-        from: msg.upDownMessage.fromUid == this.user.uid ? this.user : this.targetUser,
+        from: msg.upDownMessage.fromUid == this.socketService.loginUserId ? this.user : this.targetUser,
         content: msg.upDownMessage.content.content,
         time: new Date(+msg.upDownMessage.content.time.toString())
       }
