@@ -7,8 +7,8 @@ import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 import { DialogUserType } from '../dialog-user/dialog-user-type';
 import { com } from 'assets/message';
 import { ActivatedRoute } from '@angular/router';
-import { RestService } from '../shared/services/rest.service';
 import { Message } from '../shared/model/message';
+import { ContactService } from '../shared/services/contact.service';
 
 
 const AVATAR_URL = 'https://api.adorable.io/avatars/285';
@@ -42,7 +42,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   @ViewChildren(MatListItem, { read: ElementRef }) matListItems: QueryList<MatListItem>;
 
   constructor(
-    private restClient: RestService,
+    private contactService: ContactService,
     private socketService: SocketService,
     private route: ActivatedRoute,
     public dialog: MatDialog) { }
@@ -79,16 +79,13 @@ export class ConversationComponent implements OnInit, AfterViewInit {
             targetId = uid;
           }
         })
-        this.restClient.getUserDetail(targetId).subscribe((result) => {
-          this.targetUser = {
-            uid: result.data.id,
-            name: result.data.name,
-            avatar: `${AVATAR_URL}/${randomId}.png`
-          };
-          this.socketService.getMessageList(this.convId, 0);
-        });
+        this.targetUser = {
+          uid: targetId,
+          name: this.contactService.getUserDetail(targetId).name,
+          avatar: `${AVATAR_URL}/${randomId}.png`
+        };
+        this.socketService.getMessageList(this.convId, 0);
       }
-      
     })
   }
 
@@ -114,13 +111,11 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     this.convId = this.route.snapshot.paramMap.get('id');
     let randomId = this.getRandomId();
     
-    this.restClient.getUserDetail(this.uid).subscribe((result) => {
-      this.user = {
-        uid: result.data.id,
-        name: result.data.name,
-        avatar: `${AVATAR_URL}/${randomId}.png`
-      };
-    });
+    this.user = {
+      uid: this.uid,
+      name: this.contactService.getUserDetail(this.uid).name,
+      avatar: `${AVATAR_URL}/${randomId}.png`
+    };
 
     this.socketService.getDetailConversation(this.convId);
   }

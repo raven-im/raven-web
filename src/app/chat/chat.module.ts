@@ -10,6 +10,7 @@ import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { RestService } from './shared/services/rest.service';
 import { ChatDetailComponent } from './detail/chat.detail.component';
 import { ConversationComponent } from './conversations/conversation.component';
+import { ContactService } from './shared/services/contact.service';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ import { ConversationComponent } from './conversations/conversation.component';
     MaterialModule
   ],
   declarations: [ChatComponent, DialogUserComponent, ChatDetailComponent, ConversationComponent],
-  providers: [SocketService, RestService],
+  providers: [SocketService, RestService, ContactService],
   entryComponents: [DialogUserComponent]
 })
 export class ChatModule { }
