@@ -7,8 +7,6 @@
       <mat-list-item *ngFor="let message of messages" [ngClass]="[(message.from.uid === uid)? 'chat-list-item': 'chat-list-item-receiver']">
         <img mat-list-avatar [src]="message.from.avatar">
         <h3 mat-line>
-          <span *ngIf="message.from.uid != uid">{{message.from.name}}: </span>
-          <span *ngIf="message.from.uid === uid">me: </span>
           <b> {{message.content}} </b>
         </h3>
         <h5 mat-line>
@@ -17,13 +15,12 @@
       </mat-list-item>
     </mat-list>
     <div class="chat-footer-container">
-      <button mat-raised-button="" color="primary">To:{{targetUser.name}}</button>
       <mat-icon>message</mat-icon>
       <mat-form-field class="chat-input">
         <input matInput 
                #inputMessage 
                maxlength="140" 
-               placeholder="Type your message" 
+               placeholder="To:{{targetUser.name}}" 
                [(ngModel)]="messageContent" 
                (keyup.enter)="sendMessage(messageContent)">
         <mat-hint align="end">{{inputMessage.value.length}}/140</mat-hint>
