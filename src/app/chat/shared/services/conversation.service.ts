@@ -46,9 +46,25 @@ export class ConversationService {
   
   getConversationList():  Array<Conversation> {
     let array = new Array<Conversation>();
+    // filter long than 15 chars in conversation.
     this.conversations.forEach(conversation => {
+      if (conversation.lastMsg.length > 15) {
+        conversation.lastMsg = conversation.lastMsg.substr(0, 15) + "...";
+      }
       array.push(conversation);
     });
-    return array;
+    // sorting.
+    let arraySort = array.sort((c1,c2) => {
+        if (c1.time < c2.time) {
+            return 1;
+        }
+    
+        if (c1.time > c2.time) {
+            return -1;
+        }
+    
+        return 0;
+    });
+    return arraySort;
   } 
 }
