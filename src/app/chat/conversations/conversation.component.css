@@ -64,6 +64,6 @@
     margin-left: 80%
 }
 
-/* .mat-list-item /deep/.mat-list-item-content {
-    flex-direction: row-reverse
-} */
+.mat-list-item /deep/.mat-list-item-content {
+    flex-direction: inherit
+}
