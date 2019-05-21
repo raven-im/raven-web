@@ -1,8 +1,11 @@
 <h2 mat-dialog-title>{{params.title}}</h2>
 
 <mat-dialog-content>
+  <div *ngIf="params?.dialogType != 0">
+  <button mat-button>{{params.name}}</button>
+  </div>
   <div>
-  <mat-form-field >
+  <mat-form-field *ngIf="params?.dialogType === 0">
     <input matInput name="username" placeholder="Username" 
            [(ngModel)]="params.username" (keyup.enter)="onLogin()" (focus)="resetErrorMsg()" [formControl]="usernameFormControl" required>
     <mat-error>This field is required</mat-error>

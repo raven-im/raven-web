@@ -120,6 +120,7 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
       data: {
         username: this.user.name,
         title: this.user.name == null ? 'Welcome' : 'Profile',
+        name: this.user.name,
         dialogType: this.user.name == null ? DialogUserType.LOGIN : DialogUserType.LOGOUT
       }
     });

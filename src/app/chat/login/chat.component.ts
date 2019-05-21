@@ -4,6 +4,7 @@ import { User } from '../shared/model/user';
 import { SocketService } from '../shared/services/socket.service';
 import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 import { DialogUserType } from '../dialog-user/dialog-user-type';
+import { ContactService } from '../shared/services/contact.service';
 @Component({
   selector: 'tcc-chat',
   templateUrl: './chat.component.html',
@@ -22,6 +23,7 @@ export class ChatComponent implements OnInit {
   };
 
   constructor(
+    private contactService: ContactService,
     private socketService: SocketService,
     public dialog: MatDialog) { }
 
@@ -48,10 +50,12 @@ export class ChatComponent implements OnInit {
   }
 
   public onClickUserInfo() {
+    let uid = localStorage.getItem('user');
     this.openUserPopup({
       data: {
         username: this.user.name,
         title: this.user.name == null ? 'Welcome' : 'Profile',
+        name: this.contactService.getUserDetail(uid).name,
         dialogType: this.user.name == null ? DialogUserType.LOGIN : DialogUserType.LOGOUT
       }
     });
