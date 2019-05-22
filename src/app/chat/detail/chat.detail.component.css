@@ -63,3 +63,7 @@
 .chat-list-item-avatar {
     margin-left: 80%
 }
+
+.mat-list-item /deep/.mat-list-item-content {
+    flex-direction: inherit
+}

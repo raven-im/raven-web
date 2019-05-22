@@ -55,7 +55,7 @@ export class ChatComponent implements OnInit {
       data: {
         username: this.user.name,
         title: this.user.name == null ? 'Welcome' : 'Profile',
-        name: this.contactService.getUserDetail(uid).name,
+        name: this.contactService.getUserDetail(uid) == null ? '' : this.contactService.getUserDetail(uid).name,
         dialogType: this.user.name == null ? DialogUserType.LOGIN : DialogUserType.LOGOUT
       }
     });
