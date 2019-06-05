@@ -997,8 +997,8 @@ export namespace com {
                     /** HisMessagesReq converId */
                     converId?: (string|null);
 
-                    /** HisMessagesReq beaginTime */
-                    beaginTime?: (number|Long|null);
+                    /** HisMessagesReq beginId */
+                    beginId?: (number|Long|null);
                 }
 
                 /** Represents a HisMessagesReq. */
@@ -1016,8 +1016,8 @@ export namespace com {
                     /** HisMessagesReq converId. */
                     public converId: string;
 
-                    /** HisMessagesReq beaginTime. */
-                    public beaginTime: (number|Long);
+                    /** HisMessagesReq beginId. */
+                    public beginId: (number|Long);
 
                     /**
                      * Creates a new HisMessagesReq instance using the specified properties.

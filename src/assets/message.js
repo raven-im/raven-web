@@ -2869,7 +2869,7 @@ $root.com = (function() {
                      * @interface IHisMessagesReq
                      * @property {number|Long|null} [id] HisMessagesReq id
                      * @property {string|null} [converId] HisMessagesReq converId
-                     * @property {number|Long|null} [beaginTime] HisMessagesReq beaginTime
+                     * @property {number|Long|null} [beginId] HisMessagesReq beginId
                      */
 
                     /**
@@ -2904,12 +2904,12 @@ $root.com = (function() {
                     HisMessagesReq.prototype.converId = "";
 
                     /**
-                     * HisMessagesReq beaginTime.
-                     * @member {number|Long} beaginTime
+                     * HisMessagesReq beginId.
+                     * @member {number|Long} beginId
                      * @memberof com.raven.common.protos.HisMessagesReq
                      * @instance
                      */
-                    HisMessagesReq.prototype.beaginTime = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+                    HisMessagesReq.prototype.beginId = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
                     /**
                      * Creates a new HisMessagesReq instance using the specified properties.
@@ -2939,8 +2939,8 @@ $root.com = (function() {
                             writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.id);
                         if (message.converId != null && message.hasOwnProperty("converId"))
                             writer.uint32(/* id 2, wireType 2 =*/18).string(message.converId);
-                        if (message.beaginTime != null && message.hasOwnProperty("beaginTime"))
-                            writer.uint32(/* id 3, wireType 0 =*/24).uint64(message.beaginTime);
+                        if (message.beginId != null && message.hasOwnProperty("beginId"))
+                            writer.uint32(/* id 3, wireType 0 =*/24).uint64(message.beginId);
                         return writer;
                     };
 
@@ -2982,7 +2982,7 @@ $root.com = (function() {
                                 message.converId = reader.string();
                                 break;
                             case 3:
-                                message.beaginTime = reader.uint64();
+                                message.beginId = reader.uint64();
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -3025,9 +3025,9 @@ $root.com = (function() {
                         if (message.converId != null && message.hasOwnProperty("converId"))
                             if (!$util.isString(message.converId))
                                 return "converId: string expected";
-                        if (message.beaginTime != null && message.hasOwnProperty("beaginTime"))
-                            if (!$util.isInteger(message.beaginTime) && !(message.beaginTime && $util.isInteger(message.beaginTime.low) && $util.isInteger(message.beaginTime.high)))
-                                return "beaginTime: integer|Long expected";
+                        if (message.beginId != null && message.hasOwnProperty("beginId"))
+                            if (!$util.isInteger(message.beginId) && !(message.beginId && $util.isInteger(message.beginId.low) && $util.isInteger(message.beginId.high)))
+                                return "beginId: integer|Long expected";
                         return null;
                     };
 
@@ -3054,15 +3054,15 @@ $root.com = (function() {
                                 message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
                         if (object.converId != null)
                             message.converId = String(object.converId);
-                        if (object.beaginTime != null)
+                        if (object.beginId != null)
                             if ($util.Long)
-                                (message.beaginTime = $util.Long.fromValue(object.beaginTime)).unsigned = true;
-                            else if (typeof object.beaginTime === "string")
-                                message.beaginTime = parseInt(object.beaginTime, 10);
-                            else if (typeof object.beaginTime === "number")
-                                message.beaginTime = object.beaginTime;
-                            else if (typeof object.beaginTime === "object")
-                                message.beaginTime = new $util.LongBits(object.beaginTime.low >>> 0, object.beaginTime.high >>> 0).toNumber(true);
+                                (message.beginId = $util.Long.fromValue(object.beginId)).unsigned = true;
+                            else if (typeof object.beginId === "string")
+                                message.beginId = parseInt(object.beginId, 10);
+                            else if (typeof object.beginId === "number")
+                                message.beginId = object.beginId;
+                            else if (typeof object.beginId === "object")
+                                message.beginId = new $util.LongBits(object.beginId.low >>> 0, object.beginId.high >>> 0).toNumber(true);
                         return message;
                     };
 
@@ -3088,9 +3088,9 @@ $root.com = (function() {
                             object.converId = "";
                             if ($util.Long) {
                                 var long = new $util.Long(0, 0, true);
-                                object.beaginTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                object.beginId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                             } else
-                                object.beaginTime = options.longs === String ? "0" : 0;
+                                object.beginId = options.longs === String ? "0" : 0;
                         }
                         if (message.id != null && message.hasOwnProperty("id"))
                             if (typeof message.id === "number")
@@ -3099,11 +3099,11 @@ $root.com = (function() {
                                 object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
                         if (message.converId != null && message.hasOwnProperty("converId"))
                             object.converId = message.converId;
-                        if (message.beaginTime != null && message.hasOwnProperty("beaginTime"))
-                            if (typeof message.beaginTime === "number")
-                                object.beaginTime = options.longs === String ? String(message.beaginTime) : message.beaginTime;
+                        if (message.beginId != null && message.hasOwnProperty("beginId"))
+                            if (typeof message.beginId === "number")
+                                object.beginId = options.longs === String ? String(message.beginId) : message.beginId;
                             else
-                                object.beaginTime = options.longs === String ? $util.Long.prototype.toString.call(message.beaginTime) : options.longs === Number ? new $util.LongBits(message.beaginTime.low >>> 0, message.beaginTime.high >>> 0).toNumber(true) : message.beaginTime;
+                                object.beginId = options.longs === String ? $util.Long.prototype.toString.call(message.beginId) : options.longs === Number ? new $util.LongBits(message.beginId.low >>> 0, message.beginId.high >>> 0).toNumber(true) : message.beginId;
                         return object;
                     };
 

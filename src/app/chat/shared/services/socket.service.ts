@@ -295,11 +295,11 @@ export class SocketService {
     }
     
     // get Message List.
-    public getMessageList(convId: string, beginTime: number): void {
+    public getMessageList(convId: string, beginId: number): void {
         let request = com.raven.common.protos.HisMessagesReq.create({
             id: this.clientId, 
             converId: convId,
-            beaginTime: beginTime
+            beginId: beginId
         });
         let message = com.raven.common.protos.RavenMessage.create({
             type: com.raven.common.protos.RavenMessage.Type.HisMessagesReq,

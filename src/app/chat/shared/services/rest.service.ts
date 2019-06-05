@@ -9,7 +9,7 @@ import { UserDetailResult } from '../model/usersDetailResult';
 import { environment } from 'environments/environment';
 
 const GET_TOKEN = '/user/login';
-const GET_ACCESS_NODE = '/user/access';
+const GET_ACCESS_NODE = '/user/access/web';
 const GET_USER_LIST = '/user/list';
 const GET_USER_DETAIL = '/user/';
 

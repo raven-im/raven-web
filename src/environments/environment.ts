@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  APP_SERVER_URL:'http://34.80.127.96:8080/api',
-  IM_SERVER_URL:'http://34.80.127.96:8060/raven-zuul/route',
+  APP_SERVER_URL:'http://localhost:8080/api',
+  IM_SERVER_URL:'http://localhost:8060/route',
 };
