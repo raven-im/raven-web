@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { LoginParam } from '../model/loginParam';
 import { LoginResult } from '../model/loginResult';
 import { AccessResult } from '../model/accessResult';
 import { UsersResult } from '../model/usersResult';
 import { UserDetailResult } from '../model/usersDetailResult';
 import { environment } from 'environments/environment';
+import { FileUploadMetaResult } from '../model/fileUploadMetaResult';
+import { FileUploadResult } from '../model/fileUploadResult';
 
 const GET_TOKEN = '/user/login';
-const GET_ACCESS_NODE = '/user/access/web';
+const GET_ACCESS_NODE = '/user/access/web'; 
 const GET_USER_LIST = '/user/list';
 const GET_USER_DETAIL = '/user/';
+const UPLOAD_FILE = '/upload';
+const GET_FILE_META_DATA = '/upload/meta';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json'})
@@ -39,6 +43,27 @@ export class RestService {
       headers: new HttpHeaders({ 'AppKey': key, 'Token': token})
     };
     return this.http.get<AccessResult>(environment.IM_SERVER_URL + GET_ACCESS_NODE, urlOptions);
+  }
+
+  uploadFile(file: File, token: string): Observable<FileUploadResult> {
+    const formData: FormData = new FormData();
+    formData.append('fileKey', file, file.name); //'fileKey'
+    let urlOptions = {
+      headers: new HttpHeaders({'Token': token})
+    };
+    return this.http.post<FileUploadResult>(environment.IM_SERVER_URL + UPLOAD_FILE, formData, urlOptions);
+  }
+
+  getFileMeta(group: string, path: string, token: string): Observable<FileUploadMetaResult> {
+    const params = new HttpParams();
+    params.set('group', group);
+    params.set('path', path);
+
+    let urlOptions = {
+      headers: new HttpHeaders({'Token': token}),
+      params: params
+    };
+    return this.http.get<FileUploadMetaResult>(environment.IM_SERVER_URL + GET_FILE_META_DATA, urlOptions);
   }
 
   showErrorMsg(code: number): string {
