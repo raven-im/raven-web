@@ -12,6 +12,7 @@ import { ContactService } from '../shared/services/contact.service';
 import { ConversationService } from '../shared/services/conversation.service';
 import { RestService } from '../shared/services/rest.service';
 import { TextMsg } from '../shared/messages/textMessage';
+import { FileMsg } from '../shared/messages/fileMessage';
 
 
 const AVATAR_URL = 'https://api.adorable.io/avatars/285';
@@ -70,6 +71,12 @@ export class ConversationComponent implements OnInit, AfterViewInit {
               }
               break;
             case com.raven.common.protos.MessageType.PICTURE:
+                let imgMsg = FileMsg.fromJSON(msg.upDownMessage.content.content);
+                message = {
+                  from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
+                  content: imgMsg.getFileUrl(),
+                  time: new Date(+msg.upDownMessage.content.time.toString())
+                }
                 break;
             case com.raven.common.protos.MessageType.VIDEO:
                 break;
@@ -83,10 +90,30 @@ export class ConversationComponent implements OnInit, AfterViewInit {
       } else if (msg.hisMessagesAck != null) {
         this.messages.length = 0;
         msg.hisMessagesAck.messageList.forEach(msgItem => {
-          let message: Message = {
-            from: msgItem.uid == this.uid ? this.user : this.targetUser,
-            content: msgItem.content,
-            time: new Date(+msgItem.time.toString())
+          let message: Message;
+          switch (msgItem.type) {
+            case com.raven.common.protos.MessageType.TEXT:
+                let textMsg = TextMsg.fromJSON(msgItem.content);
+                message = {
+                  from: msgItem.uid == this.uid ? this.user : this.targetUser,
+                  content: textMsg.getContent(),
+                  time: new Date(+msgItem.time.toString())
+                }
+                break;
+            case com.raven.common.protos.MessageType.PICTURE:
+                let imgMsg = FileMsg.fromJSON(msgItem.content);
+                message = {
+                  from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
+                  content: imgMsg.getFileUrl(),
+                  time: new Date(+msg.upDownMessage.content.time.toString())
+                }
+                break;
+            case com.raven.common.protos.MessageType.VIDEO:
+                break;
+            case com.raven.common.protos.MessageType.VOICE:
+                break;
+            default:
+              return;
           }
           this.messages.push(message);
         })
@@ -182,9 +209,20 @@ export class ConversationComponent implements OnInit, AfterViewInit {
         console.log('upload result:', result.code);
         console.log('upload result:', result.data.url);
         //TODO 1 insert it to the message list
-        //TODO 2 send image message
+        this.sendImgMessage(result.data.name, result.data.size, result.data.url);
       }, error => {
 
       });
+  }
+
+  private sendImgMessage(name: string, size: number, url: string): void {
+    let imgMsg = new FileMsg(name, size, url);
+    this.socketService.sendSingleMessage(
+      this.uid,
+      this.targetUser.uid,
+      com.raven.common.protos.MessageType.PICTURE,
+      JSON.stringify(imgMsg),
+      null
+    );
   }
 }

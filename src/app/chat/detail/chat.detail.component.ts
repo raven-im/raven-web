@@ -9,6 +9,9 @@ import { com } from 'assets/message';
 import { ActivatedRoute } from '@angular/router';
 import { Message } from '../shared/model/message';
 import { ContactService } from '../shared/services/contact.service';
+import { FileMsg } from '../shared/messages/fileMessage';
+import { RestService } from '../shared/services/rest.service';
+import { TextMsg } from '../shared/messages/textMessage';
 
 
 const AVATAR_URL = 'https://api.adorable.io/avatars/285';
@@ -33,7 +36,7 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
       dialogType: DialogUserType.LOGIN
     }
   };
-
+  fileToUpload: File = null;
 
   // getting a reference to the overall list, which is the parent container of the list items
   @ViewChild(MatList, { read: ElementRef }) matList: ElementRef;
@@ -44,6 +47,7 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
   constructor(
     private contactService: ContactService,
     private socketService: SocketService,
+    private restService: RestService,
     private route: ActivatedRoute,
     public dialog: MatDialog) { }
 
@@ -54,20 +58,60 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
       if (msg.upDownMessage != null) {
         if (msg.upDownMessage.fromUid === this.uid 
         || (msg.upDownMessage.fromUid === this.targetUser.uid && msg.upDownMessage.targetUid === this.uid)) {
-          let message: Message = {
-            from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
-            content: msg.upDownMessage.content.content,
-            time: new Date(+msg.upDownMessage.content.time.toString())
+          let message: Message;
+          switch (msg.upDownMessage.content.type) {
+            case com.raven.common.protos.MessageType.TEXT:
+              let textMsg = TextMsg.fromJSON(msg.upDownMessage.content.content);
+              message = {
+                from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
+                content: textMsg.getContent(),
+                time: new Date(+msg.upDownMessage.content.time.toString())
+              }
+              break;
+            case com.raven.common.protos.MessageType.PICTURE:
+                let imgMsg = FileMsg.fromJSON(msg.upDownMessage.content.content);
+                message = {
+                  from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
+                  content: imgMsg.getFileUrl(),
+                  time: new Date(+msg.upDownMessage.content.time.toString())
+                }
+                break;
+            case com.raven.common.protos.MessageType.VIDEO:
+                break;
+            case com.raven.common.protos.MessageType.VOICE:
+                break;
+            default:
+              return;
           }
           this.messages.push(message);
         }
       } else if (msg.hisMessagesAck != null) {
         this.messages.length = 0;
         msg.hisMessagesAck.messageList.forEach(msgItem => {
-          let message: Message = {
-            from: msgItem.uid == this.uid ? this.user : this.targetUser,
-            content: msgItem.content,
-            time: new Date(+msgItem.time.toString())
+          let message: Message;
+          switch (msgItem.type) {
+            case com.raven.common.protos.MessageType.TEXT:
+                let textMsg = TextMsg.fromJSON(msgItem.content);
+                message = {
+                  from: msgItem.uid == this.uid ? this.user : this.targetUser,
+                  content: textMsg.getContent(),
+                  time: new Date(+msgItem.time.toString())
+                }
+                break;
+            case com.raven.common.protos.MessageType.PICTURE:
+                let imgMsg = FileMsg.fromJSON(msgItem.content);
+                message = {
+                  from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
+                  content: imgMsg.getFileUrl(),
+                  time: new Date(+msg.upDownMessage.content.time.toString())
+                }
+                break;
+            case com.raven.common.protos.MessageType.VIDEO:
+                break;
+            case com.raven.common.protos.MessageType.VOICE:
+                break;
+            default:
+              return;
           }
           this.messages.push(message);
         })
@@ -141,14 +185,37 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
     if (!message) {
       return;
     }
-
+    let textMsg = new TextMsg(message);
     this.socketService.sendSingleMessage(
       this.uid,
       this.targetUser.uid,
       com.raven.common.protos.MessageType.TEXT,
-      message,
+      JSON.stringify(textMsg),
       null
     );
     this.messageContent = null;
+  }
+
+  public handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+    this.restService.uploadFile(this.fileToUpload).subscribe(result => {
+      console.log('upload result:', result.code);
+      console.log('upload result:', result.data.url);
+      //TODO 1 insert it to the message list
+      this.sendImgMessage(result.data.name, result.data.size, result.data.url);
+    }, error => {
+
+    });
+  }
+
+  private sendImgMessage(name: string, size: number, url: string): void {
+    let imgMsg = new FileMsg(name, size, url);
+    this.socketService.sendSingleMessage(
+      this.uid,
+      this.targetUser.uid,
+      com.raven.common.protos.MessageType.PICTURE,
+      JSON.stringify(imgMsg),
+      null
+    );
   }
 }

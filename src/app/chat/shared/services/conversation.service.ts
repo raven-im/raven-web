@@ -3,6 +3,7 @@ import { SocketService } from './socket.service';
 import { com } from 'assets/message';
 import { Conversation } from '../model/conversation';
 import { ContactService } from './contact.service';
+import { TextMsg } from '../messages/textMessage';
 
 @Injectable()
 export class ConversationService {
@@ -22,15 +23,30 @@ export class ConversationService {
           if (this.socketClient.isLogin) {
             convInfo.uidList.forEach(uid => {
               if (uid != this.socketClient.loginUserId) {
-                let conversation: Conversation = {
-                  convId: convInfo.converId,
-                  type: convInfo.type,
-                  groupId: convInfo.groupId,
-                  name: this.contactService.getUserDetail(uid).name,
-                  lastMsg: convInfo.lastContent.content,
-                  unReadCnt: +convInfo.unCount.toString(),
-                  time: new Date(+convInfo.lastContent.time.toString()),
-                  targetUser: uid
+                let conversation: Conversation;
+                switch (convInfo.lastContent.type) {
+                  case com.raven.common.protos.MessageType.TEXT:
+                      let textMsg = TextMsg.fromJSON(convInfo.lastContent.content);
+                      conversation = {
+                        convId: convInfo.converId,
+                        type: convInfo.type,
+                        groupId: convInfo.groupId,
+                        name: this.contactService.getUserDetail(uid).name,
+                        lastMsg: textMsg.getContent(),
+                        unReadCnt: +convInfo.unCount.toString(),
+                        time: new Date(+convInfo.lastContent.time.toString()),
+                        targetUser: uid
+                      }
+                    break;
+                  case com.raven.common.protos.MessageType.PICTURE:
+
+                    break;
+                  case com.raven.common.protos.MessageType.VIDEO:
+                    break;
+                  case com.raven.common.protos.MessageType.VOICE:
+                    break;
+                  default:
+                    break;
                 }
                 this.conversations.set(convInfo.converId, conversation);
               }

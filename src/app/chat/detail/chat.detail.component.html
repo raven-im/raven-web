@@ -15,6 +15,12 @@
       </mat-list-item>
     </mat-list>
     <div class="chat-footer-container">
+      <mat-divider></mat-divider>
+      <div>
+        <input type="file"
+        id="file"
+        (change)="handleFileInput($event.target.files)">
+      </div>
       <mat-icon>message</mat-icon>
       <mat-form-field class="chat-input">
         <input matInput 
