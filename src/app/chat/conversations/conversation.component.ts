@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Message } from '../shared/model/message';
 import { ContactService } from '../shared/services/contact.service';
 import { ConversationService } from '../shared/services/conversation.service';
+import { RestService } from '../shared/services/rest.service';
 
 
 const AVATAR_URL = 'https://api.adorable.io/avatars/285';
@@ -34,7 +35,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
       dialogType: DialogUserType.LOGIN
     }
   };
-
+  fileToUpload: File = null;
 
   // getting a reference to the overall list, which is the parent container of the list items
   @ViewChild(MatList, { read: ElementRef }) matList: ElementRef;
@@ -46,6 +47,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     private convService: ConversationService,
     private contactService: ContactService,
     private socketService: SocketService,
+    private restService: RestService,
     private route: ActivatedRoute,
     public dialog: MatDialog) { }
 
@@ -157,5 +159,17 @@ export class ConversationComponent implements OnInit, AfterViewInit {
       null
     );
     this.messageContent = null;
+  }
+
+  public handleFileInput(files: FileList) {
+      this.fileToUpload = files.item(0);
+      this.restService.uploadFile(this.fileToUpload).subscribe(result => {
+        console.log('upload result:', result.code);
+        console.log('upload result:', result.data.url);
+        //TODO 1 insert it to the message list
+        //TODO 2 send image message
+      }, error => {
+
+      });
   }
 }

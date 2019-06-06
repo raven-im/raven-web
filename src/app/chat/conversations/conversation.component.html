@@ -14,6 +14,12 @@
         </h5>
       </mat-list-item>
     </mat-list>
+    <div class="form-group">
+      <label for="file">Choose File</label>
+      <input type="file"
+        id="file"
+        (change)="handleFileInput($event.target.files)">
+    </div>
     <div class="chat-footer-container">
       <mat-icon>message</mat-icon>
       <mat-form-field class="chat-input">

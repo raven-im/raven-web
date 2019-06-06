@@ -45,16 +45,18 @@ export class RestService {
     return this.http.get<AccessResult>(environment.IM_SERVER_URL + GET_ACCESS_NODE, urlOptions);
   }
 
-  uploadFile(file: File, token: string): Observable<FileUploadResult> {
+  uploadFile(file: File): Observable<FileUploadResult> {
+    let token = localStorage.getItem("token");
     const formData: FormData = new FormData();
-    formData.append('fileKey', file, file.name); //'fileKey'
+    formData.append('file', file, file.name);
     let urlOptions = {
       headers: new HttpHeaders({'Token': token})
     };
     return this.http.post<FileUploadResult>(environment.IM_SERVER_URL + UPLOAD_FILE, formData, urlOptions);
   }
 
-  getFileMeta(group: string, path: string, token: string): Observable<FileUploadMetaResult> {
+  getFileMeta(group: string, path: string): Observable<FileUploadMetaResult> {
+    let token = localStorage.getItem("token");
     const params = new HttpParams();
     params.set('group', group);
     params.set('path', path);
