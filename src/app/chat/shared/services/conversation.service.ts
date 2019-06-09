@@ -4,6 +4,7 @@ import { com } from 'assets/message';
 import { Conversation } from '../model/conversation';
 import { ContactService } from './contact.service';
 import { TextMsg } from '../messages/textMessage';
+import { FileMsg } from '../messages/fileMessage';
 
 @Injectable()
 export class ConversationService {
@@ -23,23 +24,15 @@ export class ConversationService {
           if (this.socketClient.isLogin) {
             convInfo.uidList.forEach(uid => {
               if (uid != this.socketClient.loginUserId) {
-                let conversation: Conversation;
+                let lastMsgDisplay : string = 'default';
                 switch (convInfo.lastContent.type) {
                   case com.raven.common.protos.MessageType.TEXT:
                       let textMsg = TextMsg.fromJSON(convInfo.lastContent.content);
-                      conversation = {
-                        convId: convInfo.converId,
-                        type: convInfo.type,
-                        groupId: convInfo.groupId,
-                        name: this.contactService.getUserDetail(uid).name,
-                        lastMsg: textMsg.getContent(),
-                        unReadCnt: +convInfo.unCount.toString(),
-                        time: new Date(+convInfo.lastContent.time.toString()),
-                        targetUser: uid
-                      }
+                      lastMsgDisplay = textMsg.getContent();
                     break;
                   case com.raven.common.protos.MessageType.PICTURE:
-
+                      let imgMsg = FileMsg.fromJSON(convInfo.lastContent.content);
+                      lastMsgDisplay = imgMsg.getFileName();
                     break;
                   case com.raven.common.protos.MessageType.VIDEO:
                     break;
@@ -47,6 +40,16 @@ export class ConversationService {
                     break;
                   default:
                     break;
+                }
+                let conversation: Conversation = {
+                  convId: convInfo.converId,
+                  type: convInfo.type,
+                  groupId: convInfo.groupId,
+                  name: this.contactService.getUserDetail(uid).name,
+                  lastMsg: lastMsgDisplay,
+                  unReadCnt: +convInfo.unCount.toString(),
+                  time: new Date(+convInfo.lastContent.time.toString()),
+                  targetUser: uid
                 }
                 this.conversations.set(convInfo.converId, conversation);
               }

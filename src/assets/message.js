@@ -1136,6 +1136,12 @@ $root.com = (function() {
                                 return "code: enum value expected";
                             case 0:
                             case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                            case 6:
+                            case 7:
                                 break;
                             }
                         if (message.msg != null && message.hasOwnProperty("msg"))
@@ -1173,9 +1179,33 @@ $root.com = (function() {
                         case 0:
                             message.code = 0;
                             break;
-                        case "FAIL":
+                        case "CLIENT_ID_REPEAT":
                         case 1:
                             message.code = 1;
+                            break;
+                        case "CONVER_TYPE_INVALID":
+                        case 2:
+                            message.code = 2;
+                            break;
+                        case "KAFKA_ERROR":
+                        case 3:
+                            message.code = 3;
+                            break;
+                        case "CONVER_ID_INVALID":
+                        case 4:
+                            message.code = 4;
+                            break;
+                        case "NO_TARGET":
+                        case 5:
+                            message.code = 5;
+                            break;
+                        case "TOKEN_INVALID":
+                        case 6:
+                            message.code = 6;
+                            break;
+                        case "OPERATION_TYPE_INVALID":
+                        case 7:
+                            message.code = 7;
                             break;
                         }
                         if (object.msg != null)
@@ -2356,6 +2386,12 @@ $root.com = (function() {
                                 return "code: enum value expected";
                             case 0:
                             case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                            case 6:
+                            case 7:
                                 break;
                             }
                         return null;
@@ -2409,9 +2445,33 @@ $root.com = (function() {
                         case 0:
                             message.code = 0;
                             break;
-                        case "FAIL":
+                        case "CLIENT_ID_REPEAT":
                         case 1:
                             message.code = 1;
+                            break;
+                        case "CONVER_TYPE_INVALID":
+                        case 2:
+                            message.code = 2;
+                            break;
+                        case "KAFKA_ERROR":
+                        case 3:
+                            message.code = 3;
+                            break;
+                        case "CONVER_ID_INVALID":
+                        case 4:
+                            message.code = 4;
+                            break;
+                        case "NO_TARGET":
+                        case 5:
+                            message.code = 5;
+                            break;
+                        case "TOKEN_INVALID":
+                        case 6:
+                            message.code = 6;
+                            break;
+                        case "OPERATION_TYPE_INVALID":
+                        case 7:
+                            message.code = 7;
                             break;
                         }
                         return message;
@@ -2493,12 +2553,24 @@ $root.com = (function() {
                  * @name com.raven.common.protos.Code
                  * @enum {string}
                  * @property {number} SUCCESS=0 SUCCESS value
-                 * @property {number} FAIL=1 FAIL value
+                 * @property {number} CLIENT_ID_REPEAT=1 CLIENT_ID_REPEAT value
+                 * @property {number} CONVER_TYPE_INVALID=2 CONVER_TYPE_INVALID value
+                 * @property {number} KAFKA_ERROR=3 KAFKA_ERROR value
+                 * @property {number} CONVER_ID_INVALID=4 CONVER_ID_INVALID value
+                 * @property {number} NO_TARGET=5 NO_TARGET value
+                 * @property {number} TOKEN_INVALID=6 TOKEN_INVALID value
+                 * @property {number} OPERATION_TYPE_INVALID=7 OPERATION_TYPE_INVALID value
                  */
                 protos.Code = (function() {
                     var valuesById = {}, values = Object.create(valuesById);
                     values[valuesById[0] = "SUCCESS"] = 0;
-                    values[valuesById[1] = "FAIL"] = 1;
+                    values[valuesById[1] = "CLIENT_ID_REPEAT"] = 1;
+                    values[valuesById[2] = "CONVER_TYPE_INVALID"] = 2;
+                    values[valuesById[3] = "KAFKA_ERROR"] = 3;
+                    values[valuesById[4] = "CONVER_ID_INVALID"] = 4;
+                    values[valuesById[5] = "NO_TARGET"] = 5;
+                    values[valuesById[6] = "TOKEN_INVALID"] = 6;
+                    values[valuesById[7] = "OPERATION_TYPE_INVALID"] = 7;
                     return values;
                 })();
 
@@ -3861,6 +3933,12 @@ $root.com = (function() {
                                 return "code: enum value expected";
                             case 0:
                             case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                            case 6:
+                            case 7:
                                 break;
                             }
                         if (message.time != null && message.hasOwnProperty("time"))
@@ -3909,9 +3987,33 @@ $root.com = (function() {
                         case 0:
                             message.code = 0;
                             break;
-                        case "FAIL":
+                        case "CLIENT_ID_REPEAT":
                         case 1:
                             message.code = 1;
+                            break;
+                        case "CONVER_TYPE_INVALID":
+                        case 2:
+                            message.code = 2;
+                            break;
+                        case "KAFKA_ERROR":
+                        case 3:
+                            message.code = 3;
+                            break;
+                        case "CONVER_ID_INVALID":
+                        case 4:
+                            message.code = 4;
+                            break;
+                        case "NO_TARGET":
+                        case 5:
+                            message.code = 5;
+                            break;
+                        case "TOKEN_INVALID":
+                        case 6:
+                            message.code = 6;
+                            break;
+                        case "OPERATION_TYPE_INVALID":
+                        case 7:
+                            message.code = 7;
                             break;
                         }
                         if (object.time != null)

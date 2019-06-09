@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
+  IM_SERVER_IP:'localhost',
   APP_SERVER_URL:'http://localhost:8080/api',
   IM_SERVER_URL:'http://localhost:8060/route',
 };

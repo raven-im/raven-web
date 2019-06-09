@@ -6,6 +6,7 @@ import { LoginParam } from '../shared/model/loginParam';
 import { DialogUserType } from './dialog-user-type';
 import { ContactService } from '../shared/services/contact.service';
 import { Router } from '@angular/router';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'tcc-dialog-user',
@@ -47,7 +48,7 @@ export class DialogUserComponent implements OnInit {
               console.log('access code:', accessResult.code);
               if (accessResult.code === 10000) {
                 console.log('access node:', accessResult.data.ip, accessResult.data.port);
-                localStorage.setItem('access-node', accessResult.data.ip + ":" + accessResult.data.port);
+                localStorage.setItem('access-node', environment.IM_SERVER_IP + ":" + accessResult.data.port);
                 //close dialog.
                 this.dialogRef.close({
                   username: this.params.username,

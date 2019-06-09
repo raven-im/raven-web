@@ -7,7 +7,7 @@ import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 import { DialogUserType } from '../dialog-user/dialog-user-type';
 import { com } from 'assets/message';
 import { ActivatedRoute } from '@angular/router';
-import { Message } from '../shared/model/message';
+import { Message, MsgType } from '../shared/model/message';
 import { ContactService } from '../shared/services/contact.service';
 import { FileMsg } from '../shared/messages/fileMessage';
 import { RestService } from '../shared/services/rest.service';
@@ -63,6 +63,7 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
             case com.raven.common.protos.MessageType.TEXT:
               let textMsg = TextMsg.fromJSON(msg.upDownMessage.content.content);
               message = {
+                type: MsgType.TEXT,
                 from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
                 content: textMsg.getContent(),
                 time: new Date(+msg.upDownMessage.content.time.toString())
@@ -71,6 +72,7 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
             case com.raven.common.protos.MessageType.PICTURE:
                 let imgMsg = FileMsg.fromJSON(msg.upDownMessage.content.content);
                 message = {
+                  type: MsgType.IMAGE,
                   from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
                   content: imgMsg.getFileUrl(),
                   time: new Date(+msg.upDownMessage.content.time.toString())
@@ -93,6 +95,7 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
             case com.raven.common.protos.MessageType.TEXT:
                 let textMsg = TextMsg.fromJSON(msgItem.content);
                 message = {
+                  type: MsgType.TEXT,
                   from: msgItem.uid == this.uid ? this.user : this.targetUser,
                   content: textMsg.getContent(),
                   time: new Date(+msgItem.time.toString())
@@ -101,6 +104,7 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
             case com.raven.common.protos.MessageType.PICTURE:
                 let imgMsg = FileMsg.fromJSON(msgItem.content);
                 message = {
+                  type: MsgType.IMAGE,
                   from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
                   content: imgMsg.getFileUrl(),
                   time: new Date(+msg.upDownMessage.content.time.toString())

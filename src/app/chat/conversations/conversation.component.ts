@@ -7,7 +7,7 @@ import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 import { DialogUserType } from '../dialog-user/dialog-user-type';
 import { com } from 'assets/message';
 import { ActivatedRoute } from '@angular/router';
-import { Message } from '../shared/model/message';
+import { Message, MsgType } from '../shared/model/message';
 import { ContactService } from '../shared/services/contact.service';
 import { ConversationService } from '../shared/services/conversation.service';
 import { RestService } from '../shared/services/rest.service';
@@ -65,6 +65,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
             case com.raven.common.protos.MessageType.TEXT:
               let textMsg = TextMsg.fromJSON(msg.upDownMessage.content.content);
               message = {
+                type: MsgType.TEXT,
                 from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
                 content: textMsg.getContent(),
                 time: new Date(+msg.upDownMessage.content.time.toString())
@@ -73,6 +74,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
             case com.raven.common.protos.MessageType.PICTURE:
                 let imgMsg = FileMsg.fromJSON(msg.upDownMessage.content.content);
                 message = {
+                  type: MsgType.IMAGE,
                   from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
                   content: imgMsg.getFileUrl(),
                   time: new Date(+msg.upDownMessage.content.time.toString())
@@ -95,6 +97,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
             case com.raven.common.protos.MessageType.TEXT:
                 let textMsg = TextMsg.fromJSON(msgItem.content);
                 message = {
+                  type: MsgType.TEXT,
                   from: msgItem.uid == this.uid ? this.user : this.targetUser,
                   content: textMsg.getContent(),
                   time: new Date(+msgItem.time.toString())
@@ -103,9 +106,10 @@ export class ConversationComponent implements OnInit, AfterViewInit {
             case com.raven.common.protos.MessageType.PICTURE:
                 let imgMsg = FileMsg.fromJSON(msgItem.content);
                 message = {
-                  from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
+                  type: MsgType.IMAGE,
+                  from: msgItem.uid == this.uid ? this.user : this.targetUser,
                   content: imgMsg.getFileUrl(),
-                  time: new Date(+msg.upDownMessage.content.time.toString())
+                  time: new Date(+msgItem.time.toString())
                 }
                 break;
             case com.raven.common.protos.MessageType.VIDEO:
