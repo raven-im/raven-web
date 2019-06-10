@@ -22,15 +22,17 @@
       </mat-list-item>
     </mat-list>
     <div class="chat-footer-container">
-      <mat-divider></mat-divider>
-      <div>
+      <div class="tool-box">
+        <mat-icon (click)="onClickFolder()">folder</mat-icon>
+        <mat-icon (click)="onClickMessage()">message</mat-icon>
         <input type="file"
-        id="file"
+        id="file_upload"
+        style="display: none;"
         (change)="handleFileInput($event.target.files)">
       </div>
-      <mat-icon>message</mat-icon>
       <mat-form-field class="chat-input">
         <input matInput 
+               id="input_message"
                #inputMessage 
                maxlength="140" 
                placeholder="To:{{targetUser.name}}" 

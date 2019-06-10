@@ -4,14 +4,15 @@
 <div class="chat-container">
   <mat-card class="main-card">
     <div class="chat-footer-container">
-      <mat-icon>message</mat-icon>
+      <div class="tool-box">
+        <mat-icon>folder</mat-icon>
+        <mat-icon>message</mat-icon>
+      </div>
       <mat-form-field class="chat-input">
         <input matInput 
                #inputMessage 
                maxlength="140" 
-               placeholder="Type your message" 
-               [(ngModel)]="messageContent" 
-               (keyup.enter)="sendMessage(messageContent)">
+               placeholder="Type your message">
         <mat-hint align="end">{{inputMessage.value.length}}/140</mat-hint>
       </mat-form-field>
     </div>

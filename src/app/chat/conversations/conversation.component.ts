@@ -231,4 +231,14 @@ export class ConversationComponent implements OnInit, AfterViewInit {
       null
     );
   }
+
+  private onClickFolder(): void {
+    let fileUpload = document.getElementById('file_upload');
+    fileUpload.click();
+  }
+
+  private onClickMessage(): void {
+    let inputMessage = document.getElementById('input_message');
+    inputMessage.click();
+  }
 }

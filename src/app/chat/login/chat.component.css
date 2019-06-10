@@ -13,8 +13,8 @@
 }
 
 .chat-input {
-    padding-top: 20px;
-    width: 90%; 
+    padding-top: 5px;
+    width: 100%; 
 }
 
 .chat-list {
@@ -46,4 +46,9 @@
 
 .chat-notification {
     text-align: center;
+}
+
+.tool-box {
+    border:1px solid #808080; 
+    width:fit-content;
 }
