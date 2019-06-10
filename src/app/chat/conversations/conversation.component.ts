@@ -232,12 +232,12 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     );
   }
 
-  private onClickFolder(): void {
+  public onClickFolder(): void {
     let fileUpload = document.getElementById('file_upload');
     fileUpload.click();
   }
 
-  private onClickMessage(): void {
+  public onClickMessage(): void {
     let inputMessage = document.getElementById('input_message');
     inputMessage.click();
   }
