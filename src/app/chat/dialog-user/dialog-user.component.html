@@ -1,8 +1,11 @@
 <h2 mat-dialog-title>{{params.title}}</h2>
 
 <mat-dialog-content>
-  <div *ngIf="params?.dialogType != 0">
-  <button mat-button>{{params.name}}</button>
+  <div *ngIf="params?.dialogType != 0" class="avatar-div">
+    <button mat-button>{{params.name}}</button>
+    <div class="avatar-img">
+      <img width="auto" height="auto" [src]="params.portrait">
+    </div>
   </div>
   <div>
   <mat-form-field *ngIf="params?.dialogType === 0">

@@ -3,4 +3,5 @@ export class UsersOutParam {
     name: string;
     state: number;
     type: number;
+    portrait: string;
 }

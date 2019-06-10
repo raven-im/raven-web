@@ -56,7 +56,8 @@ export class ChatComponent implements OnInit {
         username: this.user.name,
         title: this.user.name == null ? 'Welcome' : 'Profile',
         name: this.contactService.getUserDetail(uid) == null ? '' : this.contactService.getUserDetail(uid).name,
-        dialogType: this.user.name == null ? DialogUserType.LOGIN : DialogUserType.LOGOUT
+        dialogType: this.user.name == null ? DialogUserType.LOGIN : DialogUserType.LOGOUT,
+        portrait: "http://18.136.206.81:8888/group1/M00/00/00/rB8XKFz9L52AEYxaAAEENtb0Q8w436.gif",//this.contactService.getUserDetail(uid) == null ? '' : this.contactService.getUserDetail(uid).portrait,
       }
     });
   }
