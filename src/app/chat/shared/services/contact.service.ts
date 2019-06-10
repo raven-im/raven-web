@@ -54,6 +54,12 @@ export class ContactService {
     return array;
   }
   
+  setPortrait(uid: string, url: string) {
+    let userInfo = this.contacts.get(uid);
+    userInfo.portrait = url;
+    this.contacts.set(uid, userInfo);
+  }
+
   clear(): void {
     this.contacts.clear();
   }

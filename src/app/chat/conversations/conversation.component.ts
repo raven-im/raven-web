@@ -13,9 +13,8 @@ import { ConversationService } from '../shared/services/conversation.service';
 import { RestService } from '../shared/services/rest.service';
 import { TextMsg } from '../shared/messages/textMessage';
 import { FileMsg } from '../shared/messages/fileMessage';
-
-
-const AVATAR_URL = 'https://api.adorable.io/avatars/285';
+import { UsersOutParam } from '../shared/model/usersOutParam';
+import { Constants } from '../shared/utils/contants';
 
 @Component({
   selector: 'tcc-conversation',
@@ -145,36 +144,38 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     this.uid = this.socketService.loginUserId;
     this.messages = new Array<Message>();
     this.convId = this.route.snapshot.paramMap.get('id');
-    let randomId = this.getRandomId();
     
     this.user = {
       uid: this.uid,
       name: this.contactService.getUserDetail(this.uid).name,
-      avatar: `${AVATAR_URL}/${randomId}.png`
+      avatar: this.contactService.getUserDetail(this.uid).portrait.length > 0 
+        ? this.contactService.getUserDetail(this.uid).portrait : Constants.DEFAULT_PORTRAIT
     };
 
-    randomId = this.getRandomId();
     let detail = this.convService.getConversationDetail(this.convId);
     this.targetUser = {
       uid: detail.targetUser,
       name: this.contactService.getUserDetail(detail.targetUser).name,
-      avatar: `${AVATAR_URL}/${randomId}.png`
+      avatar: this.contactService.getUserDetail(detail.targetUser).portrait.length > 0 
+        ? this.contactService.getUserDetail(detail.targetUser).portrait : Constants.DEFAULT_PORTRAIT
     };
     this.socketService.getMessageList(this.convId, 0);
   }
 
-  private getRandomId(): number {
-    return Math.floor(Math.random() * (1000000)) + 1;
-  }
-
   public onClickUserInfo() {
+    let uid = localStorage.getItem('user');
+    let userDetail: UsersOutParam = this.contactService.getUserDetail(uid);
+    let portrait = Constants.DEFAULT_PORTRAIT;
+    if (userDetail != null && userDetail.portrait.length > 0) {
+      portrait = userDetail.portrait;
+    }
     this.openUserPopup({
       data: {
         username: this.user.name,
         title: this.user.name == null ? 'Welcome' : 'Profile',
-        name: this.user.name,
+        name: userDetail == null ? '' : userDetail.name,
         dialogType: this.user.name == null ? DialogUserType.LOGIN : DialogUserType.LOGOUT,
-        portrait: "http://18.136.206.81:8888/group1/M00/00/00/rB8XKFz9L52AEYxaAAEENtb0Q8w436.gif",//this.contactService.getUserDetail(uid) == null ? '' : this.contactService.getUserDetail(uid).portrait,
+        portrait: portrait,
       }
     });
   }

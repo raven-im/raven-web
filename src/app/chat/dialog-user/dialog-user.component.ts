@@ -109,6 +109,7 @@ export class DialogUserComponent implements OnInit {
       console.log('upload result:', result.code);
       console.log('upload result:', result.data.url);
       this.params.portrait = result.data.url;
+      this.contactService.setPortrait(uid, result.data.url);
       this.fileToUpload = null;
     }, error => {
 

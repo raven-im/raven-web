@@ -12,9 +12,8 @@ import { ContactService } from '../shared/services/contact.service';
 import { FileMsg } from '../shared/messages/fileMessage';
 import { RestService } from '../shared/services/rest.service';
 import { TextMsg } from '../shared/messages/textMessage';
-
-
-const AVATAR_URL = 'https://api.adorable.io/avatars/285';
+import { UsersOutParam } from '../shared/model/usersOutParam';
+import { Constants } from '../shared/utils/contants';
 
 @Component({
   selector: 'tcc-chat-detail',
@@ -105,9 +104,9 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
                 let imgMsg = FileMsg.fromJSON(msgItem.content);
                 message = {
                   type: MsgType.IMAGE,
-                  from: msg.upDownMessage.fromUid == this.uid ? this.user : this.targetUser,
+                  from: msgItem.uid == this.uid ? this.user : this.targetUser,
                   content: imgMsg.getFileUrl(),
-                  time: new Date(+msg.upDownMessage.content.time.toString())
+                  time: new Date(+msgItem.time.toString())
                 }
                 break;
             case com.raven.common.protos.MessageType.VIDEO:
@@ -143,35 +142,36 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
     this.uid = this.socketService.loginUserId;
     this.messages = new Array<Message>();
     this.targetId = this.route.snapshot.paramMap.get('id');
-    let randomId = this.getRandomId();
     
     this.user = {
       uid: this.uid,
       name: this.contactService.getUserDetail(this.uid).name,
-      avatar: `${AVATAR_URL}/${randomId}.png`
+      avatar: this.contactService.getUserDetail(this.uid).portrait.length > 0 
+        ? this.contactService.getUserDetail(this.uid).portrait : Constants.DEFAULT_PORTRAIT
     };
 
-    randomId = this.getRandomId();
     this.targetUser = {
       uid: this.targetId,
       name: this.contactService.getUserDetail(this.targetId).name,
-      avatar: `${AVATAR_URL}/${randomId}.png`
+      avatar: this.contactService.getUserDetail(this.targetId).portrait.length > 0 
+        ? this.contactService.getUserDetail(this.targetId).portrait : Constants.DEFAULT_PORTRAIT
     };
   }
 
-  private getRandomId(): number {
-    return Math.floor(Math.random() * (1000000)) + 1;
-  }
-
   public onClickUserInfo() {
+    let uid = localStorage.getItem('user');
+    let userDetail: UsersOutParam = this.contactService.getUserDetail(uid);
+    let portrait = Constants.DEFAULT_PORTRAIT;
+    if (userDetail != null && userDetail.portrait.length > 0) {
+      portrait = userDetail.portrait;
+    }
     this.openUserPopup({
       data: {
         username: this.user.name,
         title: this.user.name == null ? 'Welcome' : 'Profile',
-        name: this.user.name,
+        name: userDetail == null ? '' : userDetail.name,
         dialogType: this.user.name == null ? DialogUserType.LOGIN : DialogUserType.LOGOUT,
-        portrait: "http://18.136.206.81:8888/group1/M00/00/00/rB8XKFz9L52AEYxaAAEENtb0Q8w436.gif",//this.contactService.getUserDetail(uid) == null ? '' : this.contactService.getUserDetail(uid).portrait,
-
+        portrait: portrait,
       }
     });
   }
