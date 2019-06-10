@@ -4,7 +4,8 @@
   <div *ngIf="params?.dialogType != 0" class="avatar-div">
     <button mat-button>{{params.name}}</button>
     <div class="avatar-img">
-      <img width="auto" height="auto" [src]="params.portrait">
+      <input type="image" title="Click to update" [src]="params.portrait" width="200px" height="200px" (click)="portraitClick()" />
+      <input type="file" id="file_upload" style="display: none;" accept="image/png, image/jpeg, image/gif, image/jpg" (change)="handleFileInput($event.target.files)"/>
     </div>
   </div>
   <div>

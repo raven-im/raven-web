@@ -19,11 +19,13 @@ export class DialogUserComponent implements OnInit {
   previousUsername: string;
   showError: boolean;
   errMsg: string;
+  fileToUpload: File = null;
 
   constructor(public dialogRef: MatDialogRef<DialogUserComponent>,
     @Inject(MAT_DIALOG_DATA) public params: any,
     public restClient: RestService,
     private router: Router,
+    private restService: RestService,
     public contactService: ContactService) {
     this.previousUsername = params.username ? params.username : undefined;
     this.showError = false;
@@ -93,4 +95,23 @@ export class DialogUserComponent implements OnInit {
     this.showError = false;
     this.errMsg = "";
   }
+
+  portraitClick():void {
+    let fileUpload = document.getElementById('file_upload');
+    fileUpload.click();
+  }
+
+  handleFileInput(files: FileList) {
+    console.log("update portrait");
+    this.fileToUpload = files.item(0);
+    let uid = localStorage.getItem('user');
+    this.restService.updatePortrait(this.fileToUpload, uid).subscribe(result => {
+      console.log('upload result:', result.code);
+      console.log('upload result:', result.data.url);
+      this.params.portrait = result.data.url;
+      this.fileToUpload = null;
+    }, error => {
+
+    });
+}
 }

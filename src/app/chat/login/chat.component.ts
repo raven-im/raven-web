@@ -5,6 +5,7 @@ import { SocketService } from '../shared/services/socket.service';
 import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 import { DialogUserType } from '../dialog-user/dialog-user-type';
 import { ContactService } from '../shared/services/contact.service';
+import { UsersOutParam } from '../shared/model/usersOutParam';
 @Component({
   selector: 'tcc-chat',
   templateUrl: './chat.component.html',
@@ -51,13 +52,18 @@ export class ChatComponent implements OnInit {
 
   public onClickUserInfo() {
     let uid = localStorage.getItem('user');
+    let userDetail: UsersOutParam = this.contactService.getUserDetail(uid);
+    let portrait = "http://18.136.206.81:8888/group1/M00/00/00/rB8XKFz9L52AEYxaAAEENtb0Q8w436.gif";
+    if (userDetail != null && userDetail.portrait.length > 0) {
+      portrait = userDetail.portrait;
+    }
     this.openUserPopup({
       data: {
         username: this.user.name,
         title: this.user.name == null ? 'Welcome' : 'Profile',
-        name: this.contactService.getUserDetail(uid) == null ? '' : this.contactService.getUserDetail(uid).name,
+        name: userDetail == null ? '' : userDetail.name,
         dialogType: this.user.name == null ? DialogUserType.LOGIN : DialogUserType.LOGOUT,
-        portrait: "http://18.136.206.81:8888/group1/M00/00/00/rB8XKFz9L52AEYxaAAEENtb0Q8w436.gif",//this.contactService.getUserDetail(uid) == null ? '' : this.contactService.getUserDetail(uid).portrait,
+        portrait: portrait,
       }
     });
   }

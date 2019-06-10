@@ -16,6 +16,7 @@ const GET_USER_LIST = '/user/list';
 const GET_USER_DETAIL = '/user/';
 const UPLOAD_FILE = '/upload';
 const GET_FILE_META_DATA = '/upload/meta';
+const PORTRAIT_SUFFIX = '/portrait';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json'})
@@ -53,6 +54,12 @@ export class RestService {
       headers: new HttpHeaders({'Token': token})
     };
     return this.http.post<FileUploadResult>(environment.IM_SERVER_URL + UPLOAD_FILE, formData, urlOptions);
+  }
+
+  updatePortrait(file: File, uid: string): Observable<FileUploadResult> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+    return this.http.post<FileUploadResult>(environment.APP_SERVER_URL + GET_USER_DETAIL + uid + PORTRAIT_SUFFIX, formData);
   }
 
   getFileMeta(group: string, path: string): Observable<FileUploadMetaResult> {
