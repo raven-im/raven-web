@@ -255,6 +255,6 @@ export class ConversationComponent implements OnInit, AfterViewInit {
     let notification = new Notification(user.name,{body:content,icon:user.avatar, dir:'auto'});
       setTimeout(function(){
           notification.close();
-      },10000);
+      },5000);
   }
 }

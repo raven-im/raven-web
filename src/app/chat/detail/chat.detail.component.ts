@@ -248,6 +248,6 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
     let notification = new Notification(user.name,{body:content,icon:user.avatar, dir:'auto'});
       setTimeout(function(){
           notification.close();
-      },30000);
+      },5000);
   }
 }
