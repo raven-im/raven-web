@@ -4,21 +4,11 @@
 <div class="chat-container">
   <mat-card class="main-card">
     <mat-list class="chat-list">
-      <mat-list-item *ngFor="let message of messages" [ngClass]="[(message.from.uid === uid)? 'chat-list-item': 'chat-list-item-receiver']">
+      <mat-list-item *ngFor="let message of messages" [ngSwitch]="message.type" [ngClass]="[(message.from.uid === uid)? 'chat-list-item': 'chat-list-item-receiver']">
         <img mat-list-avatar [src]="message.from.avatar">
-        <span [ngSwitch]="message.type">
-          <div *ngSwitchCase="0">
-            <h3 mat-line>
-              <b> {{message.content}} </b>
-            </h3>
-          </div>
-          <div *ngSwitchCase="1">
-            <img mat-list-avatar [src]="message.content">
-          </div>
-        </span>
-        <h5 mat-line>
-          <span> {{message.time | date:'MM-dd HH:mm'}} </span>
-        </h5>
+        <h3 *ngSwitchCase="0" mat-line ><b>{{message.content}}</b></h3>
+        <img *ngSwitchCase="1" mat-line width="50px" height="50px" [src]="message.content">
+        <span mat-line style="font-size: 10px; color:dimgrey; margin-top: 8px"> {{message.time | date:'MM-dd HH:mm'}} </span>
       </mat-list-item>
     </mat-list>
     <div class="chat-footer-container">
