@@ -67,7 +67,7 @@ export class SocketService {
     public initSocket(): void {
         // read from localstorage for socket connection.
         let url = localStorage.getItem('access-node');
-        this.messages = <Subject<com.raven.common.protos.RavenMessage>>this.connect("ws://" + url + "/ws")
+        this.messages = <Subject<com.raven.common.protos.RavenMessage>>this.connect("wss://" + url + "/ws")
 			.pipe(map((response: MessageEvent): com.raven.common.protos.RavenMessage => {
                 return com.raven.common.protos.RavenMessage.decode(new Uint8Array(response.data)); 
             }));
