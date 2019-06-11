@@ -41,6 +41,7 @@ export class ChatComponent implements OnInit {
     this.user = {
 
     };
+    this.requestNotification();
   }
 
   private initIoConnection(): void {
@@ -90,4 +91,19 @@ export class ChatComponent implements OnInit {
     }
     this.messageContent = null;
   }
+
+  private requestNotification(): void {
+    if (!('Notification' in window)) {
+      console.log('Web Notification not supported');
+      return;
+    }  
+
+    Notification.requestPermission((permission) => {
+        if (permission == 'granted') {
+          console.log('Notification granted.');
+        } else if (permission == 'denied') {
+          console.log('Notification denied.');
+        }
+      });
+    }
 }

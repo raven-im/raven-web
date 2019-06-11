@@ -86,6 +86,7 @@ export class ConversationComponent implements OnInit, AfterViewInit {
             default:
               return;
           }
+          this.notify(message.from, message);
           this.messages.push(message);
         }
       } else if (msg.hisMessagesAck != null) {
@@ -240,5 +241,20 @@ export class ConversationComponent implements OnInit, AfterViewInit {
   public onClickMessage(): void {
     let inputMessage = document.getElementById('input_message');
     inputMessage.click();
+  }
+
+  private notify(user: User, message: Message): void {
+    if (user.uid === this.uid)
+      return;
+    let content: string = 'new incoming message';
+    if (message.type == MsgType.IMAGE) {
+      content = 'image';
+    } else if (message.type == MsgType.TEXT) {
+      content = message.content;
+    }
+    let notification = new Notification(user.name,{body:content,icon:user.avatar, dir:'auto'});
+      setTimeout(function(){
+          notification.close();
+      },30000);
   }
 }
