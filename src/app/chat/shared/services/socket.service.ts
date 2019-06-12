@@ -7,7 +7,7 @@ import { Subject } from 'rxjs/Rx';
 export class SocketService {
 
     private msgMap = new Map<string, any>();
-    private clientId: number = 1;
+    private clientId: number = Date.now();
     public isLogin: boolean = false;
     public loginUserId: string;
 
@@ -94,7 +94,7 @@ export class SocketService {
                     this.isLogin = true;
                     this.loginUserId = localStorage.getItem("user");
                     this.msgMap.delete(loginAck.id.toString());
-
+                    
                     //get Conversation list.
                     this.getAllConversationList();
                 }
