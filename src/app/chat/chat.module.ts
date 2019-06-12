@@ -7,6 +7,7 @@ import { MaterialModule } from '../shared/material/material.module';
 import { ChatComponent } from './login/chat.component';
 import { SocketService } from './shared/services/socket.service';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
+import { ImgViewerComponent } from './img-viewer/img-viewer.component';
 import { RestService } from './shared/services/rest.service';
 import { ChatDetailComponent } from './detail/chat.detail.component';
 import { ConversationComponent } from './conversations/conversation.component';
@@ -20,8 +21,8 @@ import { ConversationService } from './shared/services/conversation.service';
     ReactiveFormsModule,
     MaterialModule
   ],
-  declarations: [ChatComponent, DialogUserComponent, ChatDetailComponent, ConversationComponent],
+  declarations: [ChatComponent, DialogUserComponent, ChatDetailComponent, ConversationComponent, ImgViewerComponent],
   providers: [SocketService, RestService, ContactService, ConversationService],
-  entryComponents: [DialogUserComponent]
+  entryComponents: [DialogUserComponent, ImgViewerComponent]
 })
 export class ChatModule { }

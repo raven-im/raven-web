@@ -7,7 +7,7 @@
       <mat-list-item *ngFor="let message of messages" [ngSwitch]="message.type" [ngClass]="[(message.from.uid === uid)? 'chat-list-item': 'chat-list-item-receiver']">
         <img mat-list-avatar [src]="message.from.avatar">
         <h3 *ngSwitchCase="0" mat-line ><b>{{message.content}}</b></h3>
-        <img *ngSwitchCase="1" mat-line width="50px" height="50px" [src]="message.content">
+        <img *ngSwitchCase="1" mat-line width="50px" height="50px" [src]="message.content" (click)="imgClick(message.content)">
         <span mat-line style="font-size: 10px; color:dimgrey; margin-top: 8px"> {{message.time | date:'MM-dd HH:mm'}} </span>
       </mat-list-item>
     </mat-list>

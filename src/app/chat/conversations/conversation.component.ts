@@ -15,6 +15,7 @@ import { TextMsg } from '../shared/messages/textMessage';
 import { FileMsg } from '../shared/messages/fileMessage';
 import { UsersOutParam } from '../shared/model/usersOutParam';
 import { Constants } from '../shared/utils/contants';
+import { ImgViewerComponent } from '../img-viewer/img-viewer.component';
 
 @Component({
   selector: 'tcc-conversation',
@@ -193,6 +194,15 @@ export class ConversationComponent implements OnInit, AfterViewInit {
       } else if (paramsDialog.dialogType === DialogUserType.LOGOUT) {
       }
     });
+  }
+
+  public imgClick(url: string): void {
+    let params = {
+      data: {
+        url: url
+      }
+    }
+    this.dialog.open(ImgViewerComponent, params);
   }
 
   public sendMessage(message: string): void {

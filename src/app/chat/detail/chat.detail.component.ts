@@ -14,6 +14,7 @@ import { RestService } from '../shared/services/rest.service';
 import { TextMsg } from '../shared/messages/textMessage';
 import { UsersOutParam } from '../shared/model/usersOutParam';
 import { Constants } from '../shared/utils/contants';
+import { ImgViewerComponent } from '../img-viewer/img-viewer.component';
 
 @Component({
   selector: 'tcc-chat-detail',
@@ -213,6 +214,15 @@ export class ChatDetailComponent implements OnInit, AfterViewInit {
     }, error => {
 
     });
+  }
+
+  public imgClick(url: string): void {
+    let params = {
+      data: {
+        url: url
+      }
+    }
+    this.dialog.open(ImgViewerComponent, params);
   }
 
   private sendImgMessage(name: string, size: number, url: string): void {
