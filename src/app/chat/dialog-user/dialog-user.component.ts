@@ -50,7 +50,7 @@ export class DialogUserComponent implements OnInit {
               console.log('access code:', accessResult.code);
               if (accessResult.code === 10000) {
                 console.log('access node:', accessResult.data.ip, accessResult.data.port);
-                localStorage.setItem('access-node', environment.IM_SERVER_IP);
+                localStorage.setItem('access-node', accessResult.data.ip);
                 //close dialog.
                 this.dialogRef.close({
                   username: this.params.username,
