@@ -97,7 +97,7 @@ export class DialogUserComponent implements OnInit {
   }
 
   portraitClick():void {
-    let fileUpload = document.getElementById('file_upload');
+    let fileUpload = document.getElementById('portrait_upload');
     fileUpload.click();
   }
 
