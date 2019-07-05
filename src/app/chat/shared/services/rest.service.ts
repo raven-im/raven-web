@@ -9,6 +9,7 @@ import { UserDetailResult } from '../model/usersDetailResult';
 import { environment } from 'environments/environment';
 import { FileUploadMetaResult } from '../model/fileUploadMetaResult';
 import { FileUploadResult } from '../model/fileUploadResult';
+import { FileUploadQiniuResult } from '../model/fileUploadQiniuResult';
 
 const GET_TOKEN = '/user/login';
 const GET_ACCESS_NODE = '/user/access/web'; 
@@ -17,6 +18,7 @@ const GET_USER_DETAIL = '/user/';
 const UPLOAD_FILE = '/upload';
 const GET_FILE_META_DATA = '/upload/meta';
 const PORTRAIT_SUFFIX = '/portrait';
+const QINIU_UPLOAD = '/qiniu_upload';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json'})
@@ -56,10 +58,8 @@ export class RestService {
     return this.http.post<FileUploadResult>(environment.IM_SERVER_URL + UPLOAD_FILE, formData, urlOptions);
   }
 
-  updatePortrait(file: File, uid: string): Observable<FileUploadResult> {
-    const formData: FormData = new FormData();
-    formData.append('file', file, file.name);
-    return this.http.post<FileUploadResult>(environment.APP_SERVER_URL + GET_USER_DETAIL + uid + PORTRAIT_SUFFIX, formData);
+  getQiniuUploadToken(suffix: string): Observable<FileUploadQiniuResult> {
+    return this.http.get<FileUploadQiniuResult>(environment.APP_SERVER_URL + QINIU_UPLOAD + "?suffix=" + suffix);
   }
 
   getFileMeta(group: string, path: string): Observable<FileUploadMetaResult> {
