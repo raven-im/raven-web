@@ -125,7 +125,7 @@ export class DialogUserComponent implements OnInit {
         }, 
         complete(res){
           // ...
-          console.log("done");
+          console.log("file upload done");
           that.params.portrait = QINIU_URL + result.data.url;
           that.contactService.setPortrait(uid, QINIU_URL + result.data.url);
           that.fileToUpload = null;

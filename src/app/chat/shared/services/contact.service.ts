@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { RestService } from './rest.service';
 import { SocketService } from './socket.service';
 import { UsersOutParam } from '../model/usersOutParam';
+import { PortraitParam } from '../model/portraitParam';
 
 @Injectable()
 export class ContactService {
@@ -58,6 +59,11 @@ export class ContactService {
     let userInfo = this.contacts.get(uid);
     userInfo.portrait = url;
     this.contacts.set(uid, userInfo);
+    this.restClient.updateUserPortrait(uid, new PortraitParam(url)).subscribe((result) => {
+      if (result.code != 10000) {
+        console.log("update portrait failed " + uid + " " + url);
+      }
+    });
   }
 
   clear(): void {

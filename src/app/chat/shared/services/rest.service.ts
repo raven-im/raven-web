@@ -10,6 +10,8 @@ import { environment } from 'environments/environment';
 import { FileUploadMetaResult } from '../model/fileUploadMetaResult';
 import { FileUploadResult } from '../model/fileUploadResult';
 import { FileUploadQiniuResult } from '../model/fileUploadQiniuResult';
+import { PortraitParam } from '../model/portraitParam';
+import { CommonResult } from '../model/commonResult';
 
 const GET_TOKEN = '/user/login';
 const GET_ACCESS_NODE = '/user/access/web'; 
@@ -40,6 +42,11 @@ export class RestService {
   getUserDetail(uid: string): Observable<UserDetailResult> {
     return this.http.get<UserDetailResult>(environment.APP_SERVER_URL + GET_USER_DETAIL + uid);
   }
+
+  updateUserPortrait(uid: string , param: PortraitParam): Observable<CommonResult> {
+    return this.http.post<CommonResult>(environment.APP_SERVER_URL + GET_USER_DETAIL + uid, param, httpOptions);
+  }
+
   // im server.
   getAccess(key: string, token: string): Observable<AccessResult> {
     let urlOptions = {
