@@ -12,6 +12,8 @@ import { FileUploadResult } from '../model/fileUploadResult';
 import { FileUploadQiniuResult } from '../model/fileUploadQiniuResult';
 import { PortraitParam } from '../model/portraitParam';
 import { CommonResult } from '../model/commonResult';
+import * as qiniu from 'qiniu-js';
+import { Constants } from '../utils/contants';
 
 const GET_TOKEN = '/user/login';
 const GET_ACCESS_NODE = '/user/access/web'; 
@@ -55,18 +57,18 @@ export class RestService {
     return this.http.get<AccessResult>(environment.IM_SERVER_URL + GET_ACCESS_NODE, urlOptions);
   }
 
-  // for FastDFS.
-  uploadFile(file: File): Observable<FileUploadResult> {
-    let token = localStorage.getItem("token");
-    const formData: FormData = new FormData();
-    formData.append('file', file, file.name);
-    let urlOptions = {
-      headers: new HttpHeaders({'Token': token})
-    };
-    return this.http.post<FileUploadResult>(environment.IM_SERVER_URL + UPLOAD_FILE, formData, urlOptions);
-  }
+  // // for FastDFS.
+  // uploadFile(file: File): Observable<FileUploadResult> {
+  //   let token = localStorage.getItem("token");
+  //   const formData: FormData = new FormData();
+  //   formData.append('file', file, file.name);
+  //   let urlOptions = {
+  //     headers: new HttpHeaders({'Token': token})
+  //   };
+  //   return this.http.post<FileUploadResult>(environment.IM_SERVER_URL + UPLOAD_FILE, formData, urlOptions);
+  // }
 
-  getQiniuUploadToken(suffix: string): Observable<FileUploadQiniuResult> {
+  private getQiniuUploadToken(suffix: string): Observable<FileUploadQiniuResult> {
     return this.http.get<FileUploadQiniuResult>(environment.APP_SERVER_URL + QINIU_UPLOAD + "?suffix=" + suffix);
   }
 
@@ -107,4 +109,42 @@ export class RestService {
         return "Server error.";
     }
   }
+
+  uploadFile(file: File, callback: UploadFileCallback) {
+    this.getQiniuUploadToken(file.name.split('.')[1]).subscribe(result => {
+      console.log('upload token:', result.data.token);
+      console.log('upload key:', result.data.url);
+      
+      let observer = {
+        next(res){
+          // ...
+          console.log(res.total.percent);
+        },
+        error(err){
+          // ...
+          console.log(err.isRequestError);
+        }, 
+        complete(res){
+          // ...
+          console.log("file upload done");
+          callback(Constants.QINIU_URL + result.data.url);
+        }
+      }
+  
+      let config = {
+        useCdnDomain: true,
+        // region: qiniu.region.z1
+      };
+  
+      let putExtra = {
+        fname: file.name,
+        params: {},
+        mimeType: ["image/png", "image/jpeg", "image/gif", "image/jpg"]
+      };
+  
+      let observable = qiniu.upload(file, result.data.url, result.data.token, putExtra, config)
+      observable.subscribe(observer) // 上传开始
+    });
+  }
+  
 }

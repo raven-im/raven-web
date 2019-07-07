@@ -16,7 +16,6 @@ import { FileMsg } from '../shared/messages/fileMessage';
 import { UsersOutParam } from '../shared/model/usersOutParam';
 import { Constants } from '../shared/utils/contants';
 import { ImgViewerComponent } from '../img-viewer/img-viewer.component';
-import * as qiniu from 'qiniu-js';
 
 @Component({
   selector: 'tcc-conversation',
@@ -223,51 +222,8 @@ export class ConversationComponent implements OnInit, AfterViewInit {
 
   public handleFileInput(files: FileList) {
       this.fileToUpload = files.item(0);
-      // this.restService.uploadFile(this.fileToUpload).subscribe(result => {
-      //   console.log('upload result:', result.code);
-      //   console.log('upload result:', result.data.url);
-      //   //TODO 1 insert it to the message list
-      //   this.sendImgMessage(result.data.name, result.data.size, result.data.url);
-      // }, error => {
-
-      // });
-
-      this.restService.getQiniuUploadToken(this.fileToUpload.name.split('.')[1]).subscribe(result => {
-        console.log('upload token:', result.data.token);
-        console.log('upload key:', result.data.url);
-        
-        let that = this;
-        let observer = {
-          next(res){
-            // ...
-            console.log(res.total.percent);
-          },
-          error(err){
-            // ...
-            console.log(err.isRequestError);
-          }, 
-          complete(res){
-            // ...
-            console.log("file upload done");
-            //TODO 1 insert it to the message list
-            
-            that.sendImgMessage(that.fileToUpload.name, that.fileToUpload.size, Constants.QINIU_URL + result.data.url);
-          }
-        }
-    
-        let config = {
-          useCdnDomain: true,
-          // region: qiniu.region.z1
-        };
-    
-        let putExtra = {
-          fname: this.fileToUpload.name,
-          params: {},
-          mimeType: ["image/png", "image/jpeg", "image/gif", "image/jpg"]
-        };
-    
-        let observable = qiniu.upload(this.fileToUpload, result.data.url, result.data.token, putExtra, config)
-        observable.subscribe(observer) // 上传开始
+      this.restService.uploadFile(this.fileToUpload, (url) => {
+        this.sendImgMessage(this.fileToUpload.name, this.fileToUpload.size, url);
       });
   }
 

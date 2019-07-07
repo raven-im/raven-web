@@ -6,8 +6,6 @@ import { LoginParam } from '../shared/model/loginParam';
 import { DialogUserType } from './dialog-user-type';
 import { ContactService } from '../shared/services/contact.service';
 import { Router } from '@angular/router';
-import * as qiniu from 'qiniu-js';
-import { Constants } from '../shared/utils/contants';
 
 @Component({
   selector: 'tcc-dialog-user',
@@ -106,43 +104,10 @@ export class DialogUserComponent implements OnInit {
     console.log("update portrait");
     this.fileToUpload = files.item(0);
     let uid = localStorage.getItem('user');
-    let that = this;
-    
-    this.restService.getQiniuUploadToken(this.fileToUpload.name.split('.')[1]).subscribe(result => {
-      console.log('upload token:', result.data.token);
-      console.log('upload key:', result.data.url);
-      
-      let observer = {
-        next(res){
-          // ...
-          console.log(res.total.percent);
-        },
-        error(err){
-          // ...
-          console.log(err.isRequestError);
-        }, 
-        complete(res){
-          // ...
-          console.log("file upload done");
-          that.params.portrait = Constants.QINIU_URL + result.data.url;
-          that.contactService.setPortrait(uid, Constants.QINIU_URL + result.data.url);
-          that.fileToUpload = null;
-        }
-      }
-  
-      let config = {
-        useCdnDomain: true,
-        // region: qiniu.region.z1
-      };
-  
-      let putExtra = {
-        fname: this.fileToUpload.name,
-        params: {},
-        mimeType: ["image/png", "image/jpeg", "image/gif", "image/jpg"]
-      };
-  
-      let observable = qiniu.upload(this.fileToUpload, result.data.url, result.data.token, putExtra, config)
-      observable.subscribe(observer) // 上传开始
+    this.restService.uploadFile(this.fileToUpload, (url) => {
+      this.params.portrait = url;
+      this.contactService.setPortrait(uid, url);
+      this.fileToUpload = null;
     });
 }
 }
