@@ -7,9 +7,7 @@ import { DialogUserType } from './dialog-user-type';
 import { ContactService } from '../shared/services/contact.service';
 import { Router } from '@angular/router';
 import * as qiniu from 'qiniu-js';
-import { environment } from 'environments/environment';
-
-const QINIU_URL = 'http://pu5wwrylf.bkt.clouddn.com/';
+import { Constants } from '../shared/utils/contants';
 
 @Component({
   selector: 'tcc-dialog-user',
@@ -126,8 +124,8 @@ export class DialogUserComponent implements OnInit {
         complete(res){
           // ...
           console.log("file upload done");
-          that.params.portrait = QINIU_URL + result.data.url;
-          that.contactService.setPortrait(uid, QINIU_URL + result.data.url);
+          that.params.portrait = Constants.QINIU_URL + result.data.url;
+          that.contactService.setPortrait(uid, Constants.QINIU_URL + result.data.url);
           that.fileToUpload = null;
         }
       }

@@ -55,6 +55,7 @@ export class RestService {
     return this.http.get<AccessResult>(environment.IM_SERVER_URL + GET_ACCESS_NODE, urlOptions);
   }
 
+  // for FastDFS.
   uploadFile(file: File): Observable<FileUploadResult> {
     let token = localStorage.getItem("token");
     const formData: FormData = new FormData();
