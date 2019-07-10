@@ -16,11 +16,11 @@ import * as qiniu from 'qiniu-js';
 import { Constants } from '../utils/contants';
 
 const GET_TOKEN = '/user/login';
-const GET_ACCESS_NODE = '/user/access/web'; 
+const GET_ACCESS_NODE = '/admin/gateway/ws'; 
 const GET_USER_LIST = '/user/list';
 const GET_USER_DETAIL = '/user/';
-const UPLOAD_FILE = '/upload';
-const GET_FILE_META_DATA = '/upload/meta';
+const UPLOAD_FILE = '/file/fdfs';
+const GET_FILE_META_DATA = '/file/fdfs/meta';
 const PORTRAIT_SUFFIX = '/portrait';
 const QINIU_UPLOAD = '/qiniu_upload';
 
