@@ -47,7 +47,7 @@ export class ConversationService {
                   groupId: convInfo.groupId,
                   name: this.contactService.getUserDetail(uid).name,
                   lastMsg: lastMsgDisplay,
-                  unReadCnt: +convInfo.unCount.toString(),
+                  // unReadCnt: convInfo.readMsgId, TODO
                   time: new Date(+convInfo.lastContent.time.toString()),
                   targetUser: uid
                 }

@@ -1107,6 +1107,9 @@ export namespace com {
 
                     /** HisMessagesAck messageList */
                     messageList?: (com.raven.common.protos.IMessageContent[]|null);
+
+                    /** HisMessagesAck unReadCount */
+                    unReadCount?: (number|Long|null);
                 }
 
                 /** Represents a HisMessagesAck. */
@@ -1126,6 +1129,9 @@ export namespace com {
 
                     /** HisMessagesAck messageList. */
                     public messageList: com.raven.common.protos.IMessageContent[];
+
+                    /** HisMessagesAck unReadCount. */
+                    public unReadCount: (number|Long);
 
                     /**
                      * Creates a new HisMessagesAck instance using the specified properties.
@@ -1435,8 +1441,8 @@ export namespace com {
                     /** ConverInfo groupId */
                     groupId?: (string|null);
 
-                    /** ConverInfo unCount */
-                    unCount?: (number|Long|null);
+                    /** ConverInfo readMsgId */
+                    readMsgId?: (number|Long|null);
 
                     /** ConverInfo lastContent */
                     lastContent?: (com.raven.common.protos.IMessageContent|null);
@@ -1463,8 +1469,8 @@ export namespace com {
                     /** ConverInfo groupId. */
                     public groupId: string;
 
-                    /** ConverInfo unCount. */
-                    public unCount: (number|Long);
+                    /** ConverInfo readMsgId. */
+                    public readMsgId: (number|Long);
 
                     /** ConverInfo lastContent. */
                     public lastContent?: (com.raven.common.protos.IMessageContent|null);

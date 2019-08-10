@@ -3202,6 +3202,7 @@ $root.com = (function() {
                      * @property {number|Long|null} [id] HisMessagesAck id
                      * @property {string|null} [converId] HisMessagesAck converId
                      * @property {Array.<com.raven.common.protos.IMessageContent>|null} [messageList] HisMessagesAck messageList
+                     * @property {number|Long|null} [unReadCount] HisMessagesAck unReadCount
                      */
 
                     /**
@@ -3245,6 +3246,14 @@ $root.com = (function() {
                     HisMessagesAck.prototype.messageList = $util.emptyArray;
 
                     /**
+                     * HisMessagesAck unReadCount.
+                     * @member {number|Long} unReadCount
+                     * @memberof com.raven.common.protos.HisMessagesAck
+                     * @instance
+                     */
+                    HisMessagesAck.prototype.unReadCount = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+                    /**
                      * Creates a new HisMessagesAck instance using the specified properties.
                      * @function create
                      * @memberof com.raven.common.protos.HisMessagesAck
@@ -3274,7 +3283,9 @@ $root.com = (function() {
                             writer.uint32(/* id 2, wireType 2 =*/18).string(message.converId);
                         if (message.messageList != null && message.messageList.length)
                             for (var i = 0; i < message.messageList.length; ++i)
-                                $root.com.raven.common.protos.MessageContent.encode(message.messageList[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                                $root.com.raven.common.protos.MessageContent.encode(message.messageList[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                        if (message.unReadCount != null && message.hasOwnProperty("unReadCount"))
+                            writer.uint32(/* id 4, wireType 0 =*/32).uint64(message.unReadCount);
                         return writer;
                     };
 
@@ -3315,10 +3326,13 @@ $root.com = (function() {
                             case 2:
                                 message.converId = reader.string();
                                 break;
-                            case 4:
+                            case 3:
                                 if (!(message.messageList && message.messageList.length))
                                     message.messageList = [];
                                 message.messageList.push($root.com.raven.common.protos.MessageContent.decode(reader, reader.uint32()));
+                                break;
+                            case 4:
+                                message.unReadCount = reader.uint64();
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -3370,6 +3384,9 @@ $root.com = (function() {
                                     return "messageList." + error;
                             }
                         }
+                        if (message.unReadCount != null && message.hasOwnProperty("unReadCount"))
+                            if (!$util.isInteger(message.unReadCount) && !(message.unReadCount && $util.isInteger(message.unReadCount.low) && $util.isInteger(message.unReadCount.high)))
+                                return "unReadCount: integer|Long expected";
                         return null;
                     };
 
@@ -3406,6 +3423,15 @@ $root.com = (function() {
                                 message.messageList[i] = $root.com.raven.common.protos.MessageContent.fromObject(object.messageList[i]);
                             }
                         }
+                        if (object.unReadCount != null)
+                            if ($util.Long)
+                                (message.unReadCount = $util.Long.fromValue(object.unReadCount)).unsigned = true;
+                            else if (typeof object.unReadCount === "string")
+                                message.unReadCount = parseInt(object.unReadCount, 10);
+                            else if (typeof object.unReadCount === "number")
+                                message.unReadCount = object.unReadCount;
+                            else if (typeof object.unReadCount === "object")
+                                message.unReadCount = new $util.LongBits(object.unReadCount.low >>> 0, object.unReadCount.high >>> 0).toNumber(true);
                         return message;
                     };
 
@@ -3431,6 +3457,11 @@ $root.com = (function() {
                             } else
                                 object.id = options.longs === String ? "0" : 0;
                             object.converId = "";
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, true);
+                                object.unReadCount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.unReadCount = options.longs === String ? "0" : 0;
                         }
                         if (message.id != null && message.hasOwnProperty("id"))
                             if (typeof message.id === "number")
@@ -3444,6 +3475,11 @@ $root.com = (function() {
                             for (var j = 0; j < message.messageList.length; ++j)
                                 object.messageList[j] = $root.com.raven.common.protos.MessageContent.toObject(message.messageList[j], options);
                         }
+                        if (message.unReadCount != null && message.hasOwnProperty("unReadCount"))
+                            if (typeof message.unReadCount === "number")
+                                object.unReadCount = options.longs === String ? String(message.unReadCount) : message.unReadCount;
+                            else
+                                object.unReadCount = options.longs === String ? $util.Long.prototype.toString.call(message.unReadCount) : options.longs === Number ? new $util.LongBits(message.unReadCount.low >>> 0, message.unReadCount.high >>> 0).toNumber(true) : message.unReadCount;
                         return object;
                     };
 
@@ -4118,7 +4154,7 @@ $root.com = (function() {
                      * @property {com.raven.common.protos.ConverType|null} [type] ConverInfo type
                      * @property {Array.<string>|null} [uidList] ConverInfo uidList
                      * @property {string|null} [groupId] ConverInfo groupId
-                     * @property {number|Long|null} [unCount] ConverInfo unCount
+                     * @property {number|Long|null} [readMsgId] ConverInfo readMsgId
                      * @property {com.raven.common.protos.IMessageContent|null} [lastContent] ConverInfo lastContent
                      */
 
@@ -4171,12 +4207,12 @@ $root.com = (function() {
                     ConverInfo.prototype.groupId = "";
 
                     /**
-                     * ConverInfo unCount.
-                     * @member {number|Long} unCount
+                     * ConverInfo readMsgId.
+                     * @member {number|Long} readMsgId
                      * @memberof com.raven.common.protos.ConverInfo
                      * @instance
                      */
-                    ConverInfo.prototype.unCount = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+                    ConverInfo.prototype.readMsgId = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
                     /**
                      * ConverInfo lastContent.
@@ -4219,8 +4255,8 @@ $root.com = (function() {
                                 writer.uint32(/* id 3, wireType 2 =*/26).string(message.uidList[i]);
                         if (message.groupId != null && message.hasOwnProperty("groupId"))
                             writer.uint32(/* id 4, wireType 2 =*/34).string(message.groupId);
-                        if (message.unCount != null && message.hasOwnProperty("unCount"))
-                            writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.unCount);
+                        if (message.readMsgId != null && message.hasOwnProperty("readMsgId"))
+                            writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.readMsgId);
                         if (message.lastContent != null && message.hasOwnProperty("lastContent"))
                             $root.com.raven.common.protos.MessageContent.encode(message.lastContent, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
                         return writer;
@@ -4272,7 +4308,7 @@ $root.com = (function() {
                                 message.groupId = reader.string();
                                 break;
                             case 5:
-                                message.unCount = reader.uint64();
+                                message.readMsgId = reader.uint64();
                                 break;
                             case 6:
                                 message.lastContent = $root.com.raven.common.protos.MessageContent.decode(reader, reader.uint32());
@@ -4333,9 +4369,9 @@ $root.com = (function() {
                         if (message.groupId != null && message.hasOwnProperty("groupId"))
                             if (!$util.isString(message.groupId))
                                 return "groupId: string expected";
-                        if (message.unCount != null && message.hasOwnProperty("unCount"))
-                            if (!$util.isInteger(message.unCount) && !(message.unCount && $util.isInteger(message.unCount.low) && $util.isInteger(message.unCount.high)))
-                                return "unCount: integer|Long expected";
+                        if (message.readMsgId != null && message.hasOwnProperty("readMsgId"))
+                            if (!$util.isInteger(message.readMsgId) && !(message.readMsgId && $util.isInteger(message.readMsgId.low) && $util.isInteger(message.readMsgId.high)))
+                                return "readMsgId: integer|Long expected";
                         if (message.lastContent != null && message.hasOwnProperty("lastContent")) {
                             var error = $root.com.raven.common.protos.MessageContent.verify(message.lastContent);
                             if (error)
@@ -4377,15 +4413,15 @@ $root.com = (function() {
                         }
                         if (object.groupId != null)
                             message.groupId = String(object.groupId);
-                        if (object.unCount != null)
+                        if (object.readMsgId != null)
                             if ($util.Long)
-                                (message.unCount = $util.Long.fromValue(object.unCount)).unsigned = true;
-                            else if (typeof object.unCount === "string")
-                                message.unCount = parseInt(object.unCount, 10);
-                            else if (typeof object.unCount === "number")
-                                message.unCount = object.unCount;
-                            else if (typeof object.unCount === "object")
-                                message.unCount = new $util.LongBits(object.unCount.low >>> 0, object.unCount.high >>> 0).toNumber(true);
+                                (message.readMsgId = $util.Long.fromValue(object.readMsgId)).unsigned = true;
+                            else if (typeof object.readMsgId === "string")
+                                message.readMsgId = parseInt(object.readMsgId, 10);
+                            else if (typeof object.readMsgId === "number")
+                                message.readMsgId = object.readMsgId;
+                            else if (typeof object.readMsgId === "object")
+                                message.readMsgId = new $util.LongBits(object.readMsgId.low >>> 0, object.readMsgId.high >>> 0).toNumber(true);
                         if (object.lastContent != null) {
                             if (typeof object.lastContent !== "object")
                                 throw TypeError(".com.raven.common.protos.ConverInfo.lastContent: object expected");
@@ -4415,9 +4451,9 @@ $root.com = (function() {
                             object.groupId = "";
                             if ($util.Long) {
                                 var long = new $util.Long(0, 0, true);
-                                object.unCount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                object.readMsgId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                             } else
-                                object.unCount = options.longs === String ? "0" : 0;
+                                object.readMsgId = options.longs === String ? "0" : 0;
                             object.lastContent = null;
                         }
                         if (message.converId != null && message.hasOwnProperty("converId"))
@@ -4431,11 +4467,11 @@ $root.com = (function() {
                         }
                         if (message.groupId != null && message.hasOwnProperty("groupId"))
                             object.groupId = message.groupId;
-                        if (message.unCount != null && message.hasOwnProperty("unCount"))
-                            if (typeof message.unCount === "number")
-                                object.unCount = options.longs === String ? String(message.unCount) : message.unCount;
+                        if (message.readMsgId != null && message.hasOwnProperty("readMsgId"))
+                            if (typeof message.readMsgId === "number")
+                                object.readMsgId = options.longs === String ? String(message.readMsgId) : message.readMsgId;
                             else
-                                object.unCount = options.longs === String ? $util.Long.prototype.toString.call(message.unCount) : options.longs === Number ? new $util.LongBits(message.unCount.low >>> 0, message.unCount.high >>> 0).toNumber(true) : message.unCount;
+                                object.readMsgId = options.longs === String ? $util.Long.prototype.toString.call(message.readMsgId) : options.longs === Number ? new $util.LongBits(message.readMsgId.low >>> 0, message.readMsgId.high >>> 0).toNumber(true) : message.readMsgId;
                         if (message.lastContent != null && message.hasOwnProperty("lastContent"))
                             object.lastContent = $root.com.raven.common.protos.MessageContent.toObject(message.lastContent, options);
                         return object;

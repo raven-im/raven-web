@@ -6,5 +6,5 @@
 export const environment = {
   production: false,
   APP_SERVER_URL:'http://114.67.79.183/api',
-  IM_SERVER_URL:'https://114.67.79.183/raven',
+  IM_SERVER_URL:'http://114.67.79.183/raven',
 };

@@ -3,6 +3,7 @@ import { map } from 'rxjs/operators';
 import * as Rx from 'rxjs/Rx';
 import { com } from 'assets/message';
 import { Subject } from 'rxjs/Rx';
+import { CodegenComponentFactoryResolver } from '@angular/core/src/linker/component_factory_resolver';
 @Injectable()
 export class SocketService {
 
@@ -148,8 +149,22 @@ export class SocketService {
                 break;
             case com.raven.common.protos.RavenMessage.Type.UpDownMessage:
                 console.log("new incoming messages.");
-                this.emitter.emit(msg);
+                let upDownMessage = msg.upDownMessage;
+                // send ACK.
+                let ack = com.raven.common.protos.MessageAck.create({
+                    id: upDownMessage.id, 
+                    converId: upDownMessage.converId,
+                    code: com.raven.common.protos.Code.SUCCESS,
+                    time: new Date().getTime(),
+                });
+                let message = com.raven.common.protos.RavenMessage.create({
+                    type: com.raven.common.protos.RavenMessage.Type.MessageAck,
+                    messageAck: ack
+                });
+        
+                this.send(message);
 
+                this.emitter.emit(msg);
                 //get Conversation list.
                 this.getAllConversationList();
                 break;
