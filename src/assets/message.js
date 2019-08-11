@@ -357,7 +357,7 @@ $root.com = (function() {
                             case 6:
                             case 7:
                             case 8:
-                            case 11:
+                            case 9:
                             case 10:
                                 break;
                             }
@@ -522,8 +522,8 @@ $root.com = (function() {
                             message.type = 8;
                             break;
                         case "ConverReq":
-                        case 11:
-                            message.type = 11;
+                        case 9:
+                            message.type = 9;
                             break;
                         case "ConverAck":
                         case 10:
@@ -687,7 +687,7 @@ $root.com = (function() {
                      * @property {number} HisMessagesReq=6 HisMessagesReq value
                      * @property {number} HisMessagesAck=7 HisMessagesAck value
                      * @property {number} NotifyMessage=8 NotifyMessage value
-                     * @property {number} ConverReq=11 ConverReq value
+                     * @property {number} ConverReq=9 ConverReq value
                      * @property {number} ConverAck=10 ConverAck value
                      */
                     RavenMessage.Type = (function() {
@@ -701,7 +701,7 @@ $root.com = (function() {
                         values[valuesById[6] = "HisMessagesReq"] = 6;
                         values[valuesById[7] = "HisMessagesAck"] = 7;
                         values[valuesById[8] = "NotifyMessage"] = 8;
-                        values[valuesById[11] = "ConverReq"] = 11;
+                        values[valuesById[9] = "ConverReq"] = 9;
                         values[valuesById[10] = "ConverAck"] = 10;
                         return values;
                     })();
@@ -1660,7 +1660,7 @@ $root.com = (function() {
                         if (message.converType != null && message.hasOwnProperty("converType"))
                             writer.uint32(/* id 7, wireType 0 =*/56).int32(message.converType);
                         if (message.content != null && message.hasOwnProperty("content"))
-                            $root.com.raven.common.protos.MessageContent.encode(message.content, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
+                            $root.com.raven.common.protos.MessageContent.encode(message.content, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
                         return writer;
                     };
 
@@ -1716,7 +1716,7 @@ $root.com = (function() {
                             case 7:
                                 message.converType = reader.int32();
                                 break;
-                            case 9:
+                            case 8:
                                 message.content = $root.com.raven.common.protos.MessageContent.decode(reader, reader.uint32());
                                 break;
                             default:

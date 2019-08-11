@@ -183,7 +183,7 @@ export namespace com {
                         HisMessagesReq = 6,
                         HisMessagesAck = 7,
                         NotifyMessage = 8,
-                        ConverReq = 11,
+                        ConverReq = 9,
                         ConverAck = 10
                     }
                 }
