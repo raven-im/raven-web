@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  APP_SERVER_URL:'http://114.67.79.183/api',
-  IM_SERVER_URL:'http://114.67.79.183/raven',
+  APP_SERVER_URL:'http://raven-im.xyz:8084/api',
+  IM_SERVER_URL:'http://raven-im.xyz:8084/raven',
 };
